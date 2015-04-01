@@ -1,0 +1,4 @@
+Scenario,Scenario.Number,Scale,Timepoint,LastTime,Sp.Rich,Beta.Div,Biomass,FTD.UTC,RTD.UTC
+"Timing1",1,"landscape","Initial",5,1,1,160000,1,1
+"Timing1",1,"landscape","Final",5,1,1,1600000,1,1
+"Timing1",1,"landscape","Change",5,0,0,1440000,0,0

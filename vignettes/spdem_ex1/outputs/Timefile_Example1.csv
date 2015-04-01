@@ -1,0 +1,70 @@
+Process,Time,ElapsedTime
+MCsetup complete,0.010,0.010 
+Setup prior to scenario-setup loops complete,0.000,0.010 
+Species Generated,0.000,0.010 
+Scenario Setup complete,0.020,0.030 
+Preliminary setup completed,0.080,0.110 
+composite demography matrix completed,0.100,0.210 
+Dispersal probabilities generated,0.050,0.260 
+composite dispersal matrix completed,0.030,0.290 
+setup.matrices completed,0.100,0.390 
+Compute Diagnostics Initialization complete,0.010,0.400 
+A matrix calculated for sp 1,0.000,0.400 
+A2 matrix calculated for sp 1,0.020,0.420 
+Eigen values for A2 matrix calculated for sp 1,0.010,0.430 
+Irreducibility checked for sp 1,0.070,0.500 
+Ergodicity checked for sp 1,0.000,0.500 
+Local transition matrices checked for sp 1,0.060,0.560 
+End of diagnostics loop for sp 1,0.010,0.570 
+End of diagnostics loop for all species,0.180,0.750 
+Diagnostics written to file,0.000,0.750 
+All species matrices assigned,0.000,0.750 
+Simulation began,0.000,0.750 
+Initial simulation setup complete,0.010,0.760 
+Initial results recorded,0.000,0.760 
+First demography step completed (includes matrix setup for environmental change scenarios,0.020,0.780 
+Seedling competition step finished,0.010,0.790 
+Second demography step finished,0.000,0.790 
+Carrying capacity applied,0.020,0.810 
+Environment changed,0.040,0.850 
+composite demography matrix completed,0.100,0.950 
+Dispersal probabilities generated,0.030,0.980 
+composite dispersal matrix completed,0.010,0.990 
+First timepoint completed,0.430,1.420 
+composite demography matrix completed,0.180,1.600 
+Dispersal probabilities generated,0.020,1.620 
+composite dispersal matrix completed,0.030,1.650 
+composite demography matrix completed,0.640,2.290 
+Dispersal probabilities generated,0.030,2.320 
+composite dispersal matrix completed,0.030,2.350 
+composite demography matrix completed,0.630,2.980 
+Dispersal probabilities generated,0.030,3.010 
+composite dispersal matrix completed,0.030,3.040 
+composite demography matrix completed,0.650,3.690 
+Dispersal probabilities generated,0.030,3.720 
+composite dispersal matrix completed,0.040,3.760 
+composite demography matrix completed,0.670,4.430 
+Dispersal probabilities generated,0.030,4.460 
+composite dispersal matrix completed,0.010,4.470 
+composite demography matrix completed,0.910,5.380 
+Dispersal probabilities generated,0.030,5.410 
+composite dispersal matrix completed,0.020,5.430 
+composite demography matrix completed,0.630,6.060 
+Dispersal probabilities generated,0.040,6.100 
+composite dispersal matrix completed,0.030,6.130 
+composite demography matrix completed,0.700,6.830 
+Dispersal probabilities generated,0.010,6.840 
+composite dispersal matrix completed,0.040,6.880 
+composite demography matrix completed,0.680,7.560 
+Dispersal probabilities generated,0.030,7.590 
+composite dispersal matrix completed,0.030,7.620 
+composite demography matrix completed,0.690,8.310 
+Dispersal probabilities generated,0.030,8.340 
+composite dispersal matrix completed,0.020,8.360 
+Remaining simulation runs completed,0.560,8.920 
+Calculate final metrics,0.050,8.970 
+Calculate functional diversity,0.000,8.970 
+Calculate change in metrics,0.000,8.970 
+Write & reset results at the end of the simulation,0.010,8.980 
+Process,Time,ElapsedTime
+Code completed,8.980,8.980 

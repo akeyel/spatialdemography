@@ -1,0 +1,34 @@
+SpatialDemography executed successfully
+TestRun1 Checks beginning
+Results file exists in the correct location
+Cells_occupied file exists in the correct location
+change_count_lookup file exists in the correct location
+LogLambda file exists in the correct location
+SpeciesStats_Adults_v2 file exists in the correct location
+SpeciesStats_All_v2 file exists in the correct location
+SpeciesStats_Juvs file exists in the correct location
+SpeciesStats_Seeds file exists in the correct location
+MatrixDiagnostics file exists in the correct location
+SpeciesData file exists in the correct location
+AMatrices file exists in the correct location
+AMatricesSummaries file exists in the correct location
+TransitionMatrices file exists in the correct location
+TestRun1 Checks completed successfully
+TestRun1 run successfully with no errors. Deleting generated files.
+SpatialDemography executed successfully
+TestRun2 Checks beginning
+Results file exists in the correct location
+Cells_occupied file exists in the correct location
+change_count_lookup file exists in the correct location
+LogLambda file exists in the correct location
+SpeciesStats_Adults_v2 file exists in the correct location
+SpeciesStats_All_v2 file exists in the correct location
+SpeciesStats_Juvs file exists in the correct location
+SpeciesStats_Seeds file exists in the correct location
+MatrixDiagnostics file exists in the correct location
+SpeciesData file exists in the correct location
+AMatrices file exists in the correct location
+AMatricesSummaries file exists in the correct location
+TransitionMatrices file exists in the correct location
+TestRun2 Checks completed successfully
+TestRun2 run successfully with no errors. Deleting generated files.

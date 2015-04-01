@@ -1,0 +1,2071 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Alexander C. Keyel skeyel@gmail.com" />
+
+<meta name="date" content="2015-02-13" />
+
+<title>SpatialDemography Example 1</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<link href="data:text/css,body%20%7B%0A%20%20background%2Dcolor%3A%20%23fff%3B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20max%2Dwidth%3A%20700px%3B%0A%20%20overflow%3A%20visible%3B%0A%20%20padding%2Dleft%3A%202em%3B%0A%20%20padding%2Dright%3A%202em%3B%0A%20%20font%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0A%20%20font%2Dsize%3A%2014px%3B%0A%20%20line%2Dheight%3A%201%2E35%3B%0A%7D%0A%0A%23header%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0A%0A%23TOC%20%7B%0A%20%20clear%3A%20both%3B%0A%20%20margin%3A%200%200%2010px%2010px%3B%0A%20%20padding%3A%204px%3B%0A%20%20width%3A%20400px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20border%2Dradius%3A%205px%3B%0A%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20font%2Dsize%3A%2013px%3B%0A%20%20line%2Dheight%3A%201%2E3%3B%0A%7D%0A%20%20%23TOC%20%2Etoctitle%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%20%20font%2Dsize%3A%2015px%3B%0A%20%20%20%20margin%2Dleft%3A%205px%3B%0A%20%20%7D%0A%0A%20%20%23TOC%20ul%20%7B%0A%20%20%20%20padding%2Dleft%3A%2040px%3B%0A%20%20%20%20margin%2Dleft%3A%20%2D1%2E5em%3B%0A%20%20%20%20margin%2Dtop%3A%205px%3B%0A%20%20%20%20margin%2Dbottom%3A%205px%3B%0A%20%20%7D%0A%20%20%23TOC%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dleft%3A%20%2D2em%3B%0A%20%20%7D%0A%20%20%23TOC%20li%20%7B%0A%20%20%20%20line%2Dheight%3A%2016px%3B%0A%20%20%7D%0A%0Atable%20%7B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dcolor%3A%20%23DDDDDD%3B%0A%20%20border%2Dstyle%3A%20outset%3B%0A%20%20border%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0A%20%20border%2Dwidth%3A%202px%3B%0A%20%20padding%3A%205px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%20%20line%2Dheight%3A%2018px%3B%0A%20%20padding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0A%20%20border%2Dleft%2Dstyle%3A%20none%3B%0A%20%20border%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Ap%20%7B%0A%20%20margin%3A%200%2E5em%200%3B%0A%7D%0A%0Ablockquote%20%7B%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20padding%3A%200%2E25em%200%2E75em%3B%0A%7D%0A%0Ahr%20%7B%0A%20%20border%2Dstyle%3A%20solid%3B%0A%20%20border%3A%20none%3B%0A%20%20border%2Dtop%3A%201px%20solid%20%23777%3B%0A%20%20margin%3A%2028px%200%3B%0A%7D%0A%0Adl%20%7B%0A%20%20margin%2Dleft%3A%200%3B%0A%7D%0A%20%20dl%20dd%20%7B%0A%20%20%20%20margin%2Dbottom%3A%2013px%3B%0A%20%20%20%20margin%2Dleft%3A%2013px%3B%0A%20%20%7D%0A%20%20dl%20dt%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%7D%0A%0Aul%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%7D%0A%20%20ul%20li%20%7B%0A%20%20%20%20list%2Dstyle%3A%20circle%20outside%3B%0A%20%20%7D%0A%20%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dbottom%3A%200%3B%0A%20%20%7D%0A%0Apre%2C%20code%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20color%3A%20%23333%3B%0A%7D%0Apre%20%7B%0A%20%20white%2Dspace%3A%20pre%2Dwrap%3B%20%20%20%20%2F%2A%20Wrap%20long%20lines%20%2A%2F%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20margin%3A%205px%200px%2010px%200px%3B%0A%20%20padding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Acode%20%7B%0A%20%20font%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0A%20%20font%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0A%20%20padding%3A%202px%200px%3B%0A%7D%0A%0Adiv%2Efigure%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0A%20%20background%2Dcolor%3A%20%23FFFFFF%3B%0A%20%20padding%3A%202px%3B%0A%20%20border%3A%201px%20solid%20%23DDDDDD%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20margin%3A%200%205px%3B%0A%7D%0A%0Ah1%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%20%20font%2Dsize%3A%2035px%3B%0A%20%20line%2Dheight%3A%2040px%3B%0A%7D%0A%0Ah2%20%7B%0A%20%20border%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20padding%2Dbottom%3A%202px%3B%0A%20%20font%2Dsize%3A%20145%25%3B%0A%7D%0A%0Ah3%20%7B%0A%20%20border%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20font%2Dsize%3A%20120%25%3B%0A%7D%0A%0Ah4%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0A%20%20margin%2Dleft%3A%208px%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Ah5%2C%20h6%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23ccc%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Aa%20%7B%0A%20%20color%3A%20%230033dd%3B%0A%20%20text%2Ddecoration%3A%20none%3B%0A%7D%0A%20%20a%3Ahover%20%7B%0A%20%20%20%20color%3A%20%236666ff%3B%20%7D%0A%20%20a%3Avisited%20%7B%0A%20%20%20%20color%3A%20%23800080%3B%20%7D%0A%20%20a%3Avisited%3Ahover%20%7B%0A%20%20%20%20color%3A%20%23BB00BB%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%0A%2F%2A%20Class%20described%20in%20https%3A%2F%2Fbenjeffrey%2Ecom%2Fposts%2Fpandoc%2Dsyntax%2Dhighlighting%2Dcss%0A%20%20%20Colours%20from%20https%3A%2F%2Fgist%2Egithub%2Ecom%2Frobsimmons%2F1172277%20%2A%2F%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Keyword%20%2A%2F%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%2F%2A%20DataType%20%2A%2F%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%2F%2A%20DecVal%20%28decimal%20values%29%20%2A%2F%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20BaseN%20%2A%2F%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Float%20%2A%2F%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Char%20%2A%2F%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20String%20%2A%2F%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%2F%2A%20Comment%20%2A%2F%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%2F%2A%20OtherToken%20%2A%2F%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20AlertToken%20%2A%2F%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Function%20calls%20%2A%2F%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%2F%2A%20ErrorTok%20%2A%2F%0A%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div id="header">
+<h1 class="title">SpatialDemography Example 1</h1>
+<h4 class="author"><em>Alexander C. Keyel <a href="mailto:skeyel@gmail.com">skeyel@gmail.com</a></em></h4>
+<h4 class="date"><em>2015-02-13</em></h4>
+</div>
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This first example is designed to illustrate the basic concepts of the SpatialDemography model. This example demonstrates the importance of a model being both spatially explicit and of modeling the dynamics of multiple species simultaneously.</p>
+<p>In this example, we consider a landscape that is a mosaic of grassland and forest habitat. We will consider three hypothetical grassland species. Species 1 is r-selected, and reproduces strongly due to a high SLA, but is short-lived and susceptible to an herbicide. Species 2 grows has lower resource accumulation (k-selected, low SLA) and therefore reproduces less strongly, but invests more strongly in defense and is therefore longer lived (and resistant to the herbicide). Species 3 shows intermediate reproductive potential (intermediate SLA), and is also susceptible to the herbicide, but unlike the other two species can survive in forest habitat. Species 1 and 2 are initially widespread in the landscape, while Species 3 is initially found only in the forested corner of the landscape (Cell 4).</p>
+<p>We will examine the metacommunity dynamics of these three species given the initial conditions and an herbicide treatment during the 7th and 8th time steps.</p>
+</div>
+<div id="set-up-paths-and-labels" class="section level2">
+<h2>Set up paths and labels</h2>
+<p>In order to run SpatialDemography, we need to set up several variables to ensure that the code runs properly. Mainly these inputs have to do with paths and file locations.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Optionally set the working directory. The working directory should default to the vignettes directory. If it is changed, some of the inputs from the input files will need to be copied into the changed directory.</span>
+<span class="co">#setwd(&quot;C:/docs/beplants/Scripts/spatialdemography/vignettes&quot;) </span>
+
+<span class="co">#Load the spatialdemography package</span>
+<span class="kw">library</span>(spatialdemography)</code></pre>
+<pre><code>## 
+## Attaching package: 'spatialdemography'
+## 
+## The following objects are masked _by_ '.GlobalEnv':
+## 
+##     calc.beta, calculate.traits, check.outputs, Digit,
+##     do.input.rename, import.env.lyr, make.disp.prob.v2, quant.reg,
+##     setup.env.change.mag, setup.inputs, SpatialDemography,
+##     stoch.plant.setup, test.setup</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Set up a RunName. Not actually an input, but we'll use it to build some of the required inputs</span>
+run.name =<span class="st"> &quot;spdem_ex1&quot;</span>
+
+## Set up required inputs
+
+<span class="co"># scn = indicator variable to denote scenario and to extract appropriate row from initial.conditions.file and settings.file.</span>
+<span class="co"># If only one scenario is run, this should be 1, otherwise it should be updated inside a loop with one SpatialDemography command for each scenario.</span>
+scn =<span class="st"> </span><span class="dv">1</span> 
+
+<span class="co"># s.lbl A label used in the construction of the Species file and new landscape files.</span>
+<span class="co"># Here we will leave it blank, but it may be relevant when running multiple scenarios.</span>
+s.lbl =<span class="st"> &quot;&quot;</span>
+
+<span class="co"># file.ending A text string that matches the end of the species file (either to be generated or that already exists).</span>
+file.ending =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;_%s&quot;</span>, run.name)
+
+<span class="co"># DispPath The path of the dispersal tables (if existing) or the path where dispersal tables should be created.</span>
+<span class="co"># Note that dispersal tables may take a long time to generate, so it is often desirable to share the same dispersal tables across multiple models.</span>
+DispPath =<span class="st"> &quot;dt/&quot;</span>
+
+<span class="co"># run.path The main path for the specific overall model run.</span>
+run.path =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%s/&quot;</span>,run.name) 
+
+<span class="co">#The path for model outputs.</span>
+opath =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%soutputs/&quot;</span>,run.path)
+
+<span class="co">#Create the output path</span>
+<span class="kw">dir.create</span>(opath,<span class="dt">showWarnings =</span> F, <span class="dt">recursive =</span> T)
+
+<span class="co"># A file to be created containing the model results.</span>
+<span class="co"># If there is an existing file, the results will be appended to the existing file.</span>
+ResultsFile =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%sResults%s.csv&quot;</span>,opath,file.ending)
+
+<span class="co">#Code to (optionally) delete previous versions of the ResultsFile and TimeFile.</span>
+<span class="co">#**#</span>
+do.del =<span class="st"> </span><span class="dv">1</span>
+if (do.del ==<span class="st"> </span><span class="dv">1</span>){
+  <span class="kw">unlink</span>(ResultsFile) <span class="co">#Delete any previous ResultsFile</span>
+  }</code></pre>
+</div>
+<div id="set-paths-to-input-files" class="section level2">
+<h2>Set paths to input files</h2>
+<p>In this section, we’ll discuss the requirements of each of the required input files separately. Note that none of the R code that reads in the files is necessary to run the SpatialDemography model - each file is read in by the SpatialDemography function.</p>
+<div id="initial-conditions-file" class="section level3">
+<h3>Initial conditions file</h3>
+<p>The initial conditions file specifies the initial conditions for the model. For example, how big of a landscape, how many time steps, and how many species. We will look at the file structure in greater detail below.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Set the path where your inputs are stored</span>
+input.path =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%sinputs/&quot;</span>,run.path)
+
+<span class="co"># initial.conditions.file A file to specify the initial model conditions.</span>
+initial.conditions.file =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%sInitial_conditions%s.csv&quot;</span>,input.path,file.ending)
+
+<span class="co"># Here we will read in the file, to look at its contents</span>
+ic =<span class="st"> </span><span class="kw">read.csv</span>(initial.conditions.file)</code></pre>
+<p>We will discuss the components of the initial conditions file in several groups:</p>
+<pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(<span class="kw">head</span>(ic[<span class="dv">1</span>:<span class="dv">5</span>]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Scenario</th>
+<th align="left">ModelName</th>
+<th align="right">Extent</th>
+<th align="left">Edge.Type</th>
+<th align="right">MaxTime</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">Example1</td>
+<td align="right">2</td>
+<td align="left">TORUS</td>
+<td align="right">12</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Scenario</strong> indicates the scenario number<br /><strong>ModelName</strong> is a name for the scenario<br /><strong>Extent</strong> is the length of one side of a square landscape. The number of cells in the landscape is equal to the extent squared.<br /><strong>Edge.Type</strong> determines whether dispersers crossing the landscape boundary are removed from the simulation (“ABSORBING”) or wrap around to the other side of the landscape (“TORUS”)<br /><strong>MaxTime</strong> specifies the number of model iterations</p>
+<pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(<span class="kw">head</span>(ic[<span class="dv">6</span>:<span class="dv">9</span>]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">K_g</th>
+<th align="right">multi.species.K</th>
+<th align="right">competitiontype</th>
+<th align="right">microsites</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1e+05</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2e+06</td>
+</tr>
+</tbody>
+</table>
+<p><strong>K_g</strong> indicates the adult carrying capacity in grams<br /><strong>multi.species.K</strong> is an indicator. When 0, each species has its own carrying capacity. When 1, species share a single carrying capacity<br /><strong>competitiontype</strong> is an indicator. When 0, there is no microsite competition. When 1, each cell has a set number of microsites available to each species. When 2, all species are limited by a single total number of microsites<br /><strong>microsites</strong> This specifies the number of microsites. If competitiontype == 0, then this can be NA.</p>
+<pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(<span class="kw">head</span>(ic[<span class="dv">10</span>:<span class="dv">13</span>]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">invasion</th>
+<th align="left">num.invaders</th>
+<th align="left">cells.to.invade</th>
+<th align="left">invader.repro.proportion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+<p><strong>invasion</strong> This setting indicates how frequently invasion will occur (every X time steps). Zero indicates that invasion will not occur.<br /><strong>num.invaders</strong> Specifies the number of species to invade the landscape every time there is an invasion event. These species are drawn from the regional species pool, and may include species already present in the landscape.<br /><strong>cells.to.invade</strong> The number of cells in the landscape each invading species will invade.<br /><strong>invader.repro.proportion</strong> The strength at which an invader invades, expressed as a proportion of its maximum reproductive potential (e.g., 0.5 would have half the maximum reproduction, while 5 would have 5 times the normal reproduction’s worth of propagules invading the landscape)</p>
+<p>As you can see, invasion is turned off for this example.</p>
+<pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(<span class="kw">head</span>(ic[<span class="dv">14</span>:<span class="dv">20</span>]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">num.adults</th>
+<th align="right">Tot.sp.rich</th>
+<th align="left">Land.sp.rich</th>
+<th align="left">Loc.sp.rich</th>
+<th align="left">Tot.rtd</th>
+<th align="left">Land.rtd</th>
+<th align="left">Loc.rtd</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">100</td>
+<td align="right">3</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+<p><strong>num.adults</strong> Specifies the number of starting adults in each occupied cell. This can be overridden when reading in species’ locations from a file <strong>Tot.sp.rich</strong> The total number of species, including species not in the landscape but that are part of the species pool (relevant for invasion)</p>
+<p>The remaining options are set to NA here, as they relate to species generation and assignment by SpatialDemography (not relevant to the present example)<br /><strong>Land.sp.rich</strong> The number of species to assign to the landscape.<br /><strong>Loc.sp.rich</strong> The number of species to assign to each patch in the landscape.<br /><strong>Tot.rtd</strong> When assigning species with respect to response trait diversity, the total response trait diversity to have in the regional species pool.<br /><strong>Land.rtd</strong> When assigning species with respect to response trait diversity, the response trait diversity to have in the landscape.<br /><strong>Loc.rtd</strong> When assigning species with respect to response trait diversity, the response trait diversity to have in each cell of the landscape.</p>
+</div>
+<div id="settings-file" class="section level3">
+<h3>Settings file</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># settings.file A file to specify overall model settings.</span>
+settings.file =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%sSettings%s.csv&quot;</span>,input.path,file.ending)
+
+set =<span class="st"> </span><span class="kw">read.csv</span>(settings.file)
+knitr::<span class="kw">kable</span>(<span class="kw">head</span>(set[<span class="dv">1</span>:<span class="dv">5</span>]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Scenario</th>
+<th align="right">GenerateVisualDebuggerData</th>
+<th align="right">GenerateNewSpecies</th>
+<th align="right">GenerateNewLandscape</th>
+<th align="left">lnd.lbl</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">scn1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Scenario</strong> This should correspond to the scenario number in the initial conditions file.<br /><strong>GenerateVisualDebuggerData</strong> This will generate a large amount of data related to the scenario run. Useful for understanding transient dynamics and checking the model run for errors.<br /><strong>GenerateNewSpecies</strong> An indicator for whether new species should be generated. When 1, SpatialDemography will generate new species.<br /><strong>GenerateNewLandscape</strong> An indicator for whether a new landscape should be generated (1) or read in either from file or as an R object (0).<br /><strong>lnd.lbl</strong> A label for the landscape ending (in this case scn1). This allows a user to use landscapes from previous scenario runs in later scenarios.</p>
+<pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(<span class="kw">head</span>(set[<span class="dv">6</span>:<span class="dv">7</span>]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">loc.extraction</th>
+<th align="right">timestep.extraction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>loc.extraction</strong> If a species location file is input, this setting guides the extraction of species locations, with one of three options. 1 indicates that species locations and abundances should be extracted from file. 2 indicates that only species’ locations should be extracted from the file, and that abundances will be assigned by spatialdemography. 3 indicates that adult abundances and locations will be extracted from the file, but seeds and juveniles will be constructed according to the code given in the initial.n field (not relevant to this example, and not shown here)<br /><strong>timestep.extraction</strong> Optional. It indicates which time step should be used for loc.extraction (loc.extraction is designed based on the SpeciesData.csv output, consequently model outputs can be used as model inputs for later models)</p>
+<pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(<span class="kw">head</span>(set[<span class="dv">8</span>:<span class="dv">12</span>]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">N.sim.dispersal.table</th>
+<th align="left">ignore.rtd</th>
+<th align="right">RunSimulation</th>
+<th align="right">RunMatrixDiagnostics</th>
+<th align="right">Write.Timefile</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1e+06</td>
+<td align="left">NA</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>N.sim.dispersal.table</strong> The number of simulations to use when generating dispersal tables. While we recommend a large number here (e.g., 1,000,000), that may take more than one hour to run on a standard computer. Note that dispersal tables once generated can be reused.<br /><strong>ignore.rtd</strong> An indicator for whether response trait diversity should be taken into account when generating species. In this example, it has no function, as the species file already exists.<br /><strong>RunSimulation</strong> An indicator for whether or not one wishes to run the simulation. This should almost always be 1, as the simulation is the main point of the package.<br /><strong>RunMatrixDiagnostics</strong> An indicator for whether or not to create diagnostic information about the matrices used in the model. 1 Indicates that diagnostics should be run.<br /><strong>Write.Timefile</strong> A setting indicating whether model run time should be output to file. 0 indicates no, 1 indicates total scenario run time only, and 2 indicates total run time and details should be output to file.</p>
+</div>
+<div id="environmental-layers-description-file" class="section level3">
+<h3>Environmental Layers Description File</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># env.file A file to describe environmental layers and how they change.</span>
+env.file =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%sEnvironmental_layers%s.csv&quot;</span>,input.path,file.ending)
+
+ef =<span class="st"> </span><span class="kw">read.csv</span>(env.file)
+knitr::<span class="kw">kable</span>(<span class="kw">head</span>(ef[<span class="dv">1</span>:<span class="dv">2</span>]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">env.lbl</th>
+<th align="left">landscape.identifiers</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">landcover</td>
+<td align="left">L</td>
+</tr>
+<tr class="even">
+<td align="left">herbicide</td>
+<td align="left">H</td>
+</tr>
+</tbody>
+</table>
+<p>In this example, there are two environmental layers: landcover, grassland (1) vs. forest (2) and herbicide not applied (0) vs. applied (1).<br /><strong>env.lbl</strong> This is a label or descriptor for the environmental layer.<br /><strong>landscape.identifier</strong> A single letter abbreviation for the environmental layer</p>
+<pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(<span class="kw">head</span>(ef[<span class="dv">3</span>:<span class="dv">8</span>]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">env.type</th>
+<th align="left">cover.levels</th>
+<th align="right">param1</th>
+<th align="left">param2</th>
+<th align="left">cond.lyr</th>
+<th align="left">cond.vals</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">cover</td>
+<td align="left">0.75;0.25</td>
+<td align="right">1</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+<p>Ignore these for this example. They pertain to landscapes created by SpatialDemography, and here we are working with an existing landscape. More information is available by typing ?env.type and ?env.file into the R console.</p>
+<pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(<span class="kw">head</span>(ef[<span class="dv">9</span>:<span class="dv">11</span>]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">env.change.freq</th>
+<th align="left">env.change.type</th>
+<th align="right">env.change.mag</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0</td>
+<td align="left">swap</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">from.file</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>env.change.freq</strong> The frequency of environmental change. For example, if it is 3, a given environment will change every 3 time steps. If it is 0, an environmental layer will not change. <strong>env.change.type</strong> The nature of the environmental change. Type ?env.change.type for a listing of the options. Here, we are reading in the environmental changes from file, so this option is set to from.file. <strong>env.change.mag</strong> The magnitude of the environmental change. The entries here will depend on the env.change.type, and more details can be found by typing ?env.change.type or ?env.change.mag.</p>
+</div>
+<div id="landscape-files" class="section level3">
+<h3>Landscape Files</h3>
+<p>Landscape files can either be generated by spatialdemography, or can be read in from existing files. In this example, we are working with a preexisting landscape, so will look at how to read in landscape files. While these are in .csv format, spatialdemography can also read in raster files, although at the time of this writing, support for this is rudimentary. These features may be addressed in a future vignette. In this example, we have two environmental layers: landcover and herbicides. Each file has a change step column, and then a column for every cell. Cells are numbered by row, consequently, this needs to be accounted for when displaying the landscapes in R.</p>
+<pre class="sourceCode r"><code class="sourceCode r">lpath =<span class="st"> &quot;spdem_ex1/landscape/&quot;</span>
+lc.file =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%slandcover_scn1.csv&quot;</span>,lpath)
+h.file =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%sherbicide_scn1.csv&quot;</span>,lpath)
+
+lc =<span class="st"> </span><span class="kw">read.csv</span>(lc.file)
+knitr::<span class="kw">kable</span>(lc)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">ChangeStep</th>
+<th align="right">Cell1</th>
+<th align="right">Cell2</th>
+<th align="right">Cell3</th>
+<th align="right">Cell4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Above is the basic file structure</span>
+
+lc2 =<span class="st"> </span><span class="kw">matrix</span>(lc[<span class="dv">1</span>,<span class="dv">2</span>:<span class="kw">length</span>(lc)], <span class="dt">nrow =</span> <span class="dv">2</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>) <span class="co">#starts at 2 to avoid the change.step</span>
+lc2</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,] 1    1   
+## [2,] 1    2</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Above is the layer in landscape format for the first change step (landcover in this example only has one change step)</span>
+
+<span class="co">#We will now examine the herbicide layer:</span>
+<span class="co">#Please note that the change.step in the landscape files is equal to the timestep + 1, as the change takes effect in the NEXT model run</span>
+<span class="co">#Forest cells (2) are not treated with herbicides.</span>
+
+<span class="co">#Herbicides</span>
+<span class="co">#The herbicides layer has many change steps specified because it does not change predictably at a regular interval (i.e. herbicides are applied twice, and then the layer reverts back to no application.)</span>
+herb =<span class="st"> </span><span class="kw">read.csv</span>(h.file)
+knitr::<span class="kw">kable</span>(herb)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">ChangeStep</th>
+<th align="right">Cell1</th>
+<th align="right">Cell2</th>
+<th align="right">Cell3</th>
+<th align="right">Cell4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">11</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">12</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="species-file" class="section level3">
+<h3>Species File</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># spfile A file specifying species traits.</span>
+<span class="co"># This file should be in the folder Species (it is not in the inputs folder because sometimes a species file is an output of SpatialDemography)</span>
+spfile =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%sSpecies/Species%s.csv&quot;</span>,run.path, file.ending)
+
+<span class="co"># sp.instr.file A file to describe how generation of species' base vital rates is to occur</span>
+<span class="co"># Optional file only needed if SpatialDemography is generating species so we'll set it to NA (it can also be absent entirely)</span>
+sp.instr.file =<span class="st"> </span><span class="ot">NA</span>      
+
+<span class="co"># sp.resp.instr.file A file to describe how generation of species' response traits is to occur</span>
+<span class="co"># Optional file only needed if SpatialDemography is generating species, so we'll set it to NA (it can also be absent entirely)</span>
+sp.resp.instr.rile =<span class="st"> </span><span class="ot">NA</span> <span class="co">#Optional file only needed if SpatialDemography is generating species</span>
+
+<span class="co">#Examine the species file</span>
+spf =<span class="st"> </span><span class="kw">read.csv</span>(spfile)
+knitr::<span class="kw">kable</span>(<span class="kw">head</span>(spf))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">sp</th>
+<th align="right">p01</th>
+<th align="right">p02</th>
+<th align="right">p11</th>
+<th align="right">p12</th>
+<th align="right">p22</th>
+<th align="right">p23</th>
+<th align="right">p30</th>
+<th align="right">p32</th>
+<th align="right">p33</th>
+<th align="right">biomass.adult</th>
+<th align="right">dispersalfunction</th>
+<th align="right">disppar1</th>
+<th align="right">disppar2</th>
+<th align="left">L.p23</th>
+<th align="left">H.p12</th>
+<th align="left">H.p23</th>
+<th align="left">H.p33</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0.2</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.1</td>
+<td align="right">0</td>
+<td align="right">0.1</td>
+<td align="right">2500</td>
+<td align="right">0</td>
+<td align="right">0.10</td>
+<td align="right">10</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">1</td>
+<td align="left">1;101;1;0</td>
+<td align="left">0;101;1;0.01</td>
+<td align="left">0;101;1;0.01</td>
+<td align="left">0;101;1;0</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">0.2</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.1</td>
+<td align="right">0</td>
+<td align="right">0.1</td>
+<td align="right">100</td>
+<td align="right">0</td>
+<td align="right">0.95</td>
+<td align="right">10</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">1</td>
+<td align="left">1;101;1;0</td>
+<td align="left">0;101;1;1</td>
+<td align="left">0;101;1;1</td>
+<td align="left">0;101;1;1</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">0.2</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.1</td>
+<td align="right">0</td>
+<td align="right">0.1</td>
+<td align="right">2000</td>
+<td align="right">0</td>
+<td align="right">0.50</td>
+<td align="right">10</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">1</td>
+<td align="left">1;101;1;0.8</td>
+<td align="left">0;101;1;0.01</td>
+<td align="left">0;101;1;0.01</td>
+<td align="left">0;101;1;0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>sp</strong> gives the identity of each species. Species must be numbered consecutively starting at 1.<br /><strong>p01 .. p33</strong> These correspond to the base vital rates for each species. The first number is the stage of origin, the second is the destination stage. E.g., p12 is the transition from stage 1 to stage 2.<br /><strong>biomass.adult</strong> The biomass of an adult, in g. This is used with respect to the carrying capacity. <strong>dispersalfunction</strong> An option to set the dispersal function. Currently the default is 1, which gives log-normal dispersal. <strong>disppar1</strong> The first parameter for the dispersal function. For log-normal dispersal, this is mean dispersal distance, in cells. <strong>disppar2</strong> The second dispersal parameter. For log-normal dispersal, this is the variance of dispersal distance, also in cells.</p>
+<p>The remaining values are response traits. They have a format of I.VR, where I = Landscape Identifier and VR = the vital rate that will respond. While there are several options for response traits (see ?response.functions for details), the format used here has four components: The first number specifies the landscape value to respond to. E.g., 1 indicates that a 1 is the target value The second number defines how the response type. See ?response.functions for more options.<br />101 codes for an “a”/“not a” sort of coding. The species’ vital rate will be modified by the third value if it matches the environmental condition, and by the fourth value if it does not.</p>
+<p>For example, L.p23 means that the transition from stage 2 to stage 3 responds to landcover. For species 1 and 2, when the value is 1, they have no reduction in the transition rate, but if the value is not 1 (i.e. 2), then no individuals successfully transition to stage 3 (adults). For Species 3, its transition rate is cut in half in forest habitat.</p>
+<p>In this simple example, all species show a 50% reduction in reproduction in mowed habitat. Species 1 juveniles have 0.1 their normal transition rate in grazed habitat, while the other species have 0.9 of their normal transition rate. Finally, Species 3 does not transition seeds to juveniles, nor from juvenile to adult in the presence of herbicides and adult survival is 0 (the other species are unaffected)</p>
+</div>
+<div id="species-locations-file" class="section level3">
+<h3>Species locations file</h3>
+<pre class="sourceCode r"><code class="sourceCode r">locations.file =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%slocations%s.csv&quot;</span>, input.path, file.ending)
+locs =<span class="st"> </span><span class="kw">read.csv</span>(locations.file)
+knitr::<span class="kw">kable</span>(locs)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">LifeStage</th>
+<th align="right">Species</th>
+<th align="right">TimeStep</th>
+<th align="right">Cell1</th>
+<th align="right">Cell2</th>
+<th align="right">Cell3</th>
+<th align="right">Cell4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Seeds</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1e+06</td>
+<td align="right">1e+06</td>
+<td align="right">1e+06</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Juveniles</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1e+05</td>
+<td align="right">1e+05</td>
+<td align="right">1e+05</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Adults</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">5e+03</td>
+<td align="right">5e+03</td>
+<td align="right">5e+03</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Seeds</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">5e+05</td>
+<td align="right">5e+05</td>
+<td align="right">5e+05</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Juveniles</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">5e+04</td>
+<td align="right">5e+04</td>
+<td align="right">5e+04</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Adults</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">5e+03</td>
+<td align="right">5e+03</td>
+<td align="right">5e+03</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Seeds</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">0e+00</td>
+<td align="right">0e+00</td>
+<td align="right">0e+00</td>
+<td align="right">50000</td>
+</tr>
+<tr class="even">
+<td align="left">Juveniles</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">0e+00</td>
+<td align="right">0e+00</td>
+<td align="right">0e+00</td>
+<td align="right">5000</td>
+</tr>
+<tr class="odd">
+<td align="left">Adults</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">0e+00</td>
+<td align="right">0e+00</td>
+<td align="right">0e+00</td>
+<td align="right">500</td>
+</tr>
+</tbody>
+</table>
+<p><strong>LifeStage</strong> There should be one row for each life stage for each species for each desired time step. Options are: Seeds (stage 1), Juveniles (stage 2), and Adults (stage 3).<br /><strong>Species</strong> This should give the species number.<br /><strong>TimeStep</strong> This should indicate the timestep to which the locations correspond to. Options in settings allow initializing the model at timesteps other than 1.<br /><strong>CellX</strong> Each cell in the landscape should have a column (in order) listing the abundances for the lifestage, species, and timestep.</p>
+</div>
+</div>
+<div id="run-the-model" class="section level2">
+<h2>Run the model</h2>
+<p>The model is run by calling the SpatialDemography function with all of the required inputs.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#**# Only run when troubleshooting code. Delete from final vignette</span>
+dev.mode =<span class="st"> </span><span class="dv">1</span>
+if (dev.mode ==<span class="st"> </span><span class="dv">1</span>){
+  <span class="kw">source</span>(<span class="st">&quot;C:/docs/beplants/Scripts/spatialdemography/R/sdhelper.r&quot;</span>)
+  <span class="kw">source</span>(<span class="st">&quot;C:/docs/beplants/Scripts/spatialdemography/R/spatialdemography.r&quot;</span>)
+  <span class="kw">source</span>(<span class="st">&quot;C:/docs/beplants/Scripts/spatialdemography/R/simulation.r&quot;</span>)
+  <span class="kw">library</span>(Matrix)
+  <span class="kw">library</span>(multirich)
+  }
+
+restart =<span class="st"> </span><span class="dv">0</span>
+if (restart ==<span class="st"> </span><span class="dv">1</span>){
+  myworkspace =<span class="st"> &quot;TS.RData&quot;</span>
+  <span class="kw">load</span>(myworkspace)
+  }</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># set.seed function makes the stochastic results deterministic for repeatability purposes</span>
+<span class="co"># Not actually relevant for this example, as there are no stochastic processes included.</span>
+<span class="kw">set.seed</span>(<span class="dv">567891234</span>)
+
+<span class="co">#Run SpatialDemography. This is the main command to run the model, and uses the inputs defined above.</span>
+<span class="kw">SpatialDemography</span>(scn,s.lbl,file.ending,DispPath,run.path,opath,ResultsFile,initial.conditions.file,settings.file,env.file,spfile,sp.instr.file,sp.resp.instr.file,lpath,locations.file)</code></pre>
+<pre><code>##   Scenario Scenario.Number     Scale Timepoint LastTime Sp.Rich   Beta.Div
+## 1 Example1               1 landscape   Initial       12       3  1.7142857
+## 2 Example1               1 landscape     Final       12       3  1.2000000
+## 3 Example1               1 landscape    Change       12       0 -0.5142857
+##     Biomass FTD.UTC RTD.UTC
+## 1 305000.00       3       3
+## 2 279315.09       3       3
+## 3 -25684.91       0       0</code></pre>
+</div>
+<div id="examine-model-outputs" class="section level2">
+<h2>Examine model outputs</h2>
+<p>Now we will examine the various outputs generated by spatialdemography.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Results file</span>
+out.results =<span class="st"> </span><span class="kw">read.csv</span>(ResultsFile)
+knitr::<span class="kw">kable</span>(out.results)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Scenario</th>
+<th align="right">Scenario.Number</th>
+<th align="left">Scale</th>
+<th align="left">Timepoint</th>
+<th align="right">LastTime</th>
+<th align="right">Sp.Rich</th>
+<th align="right">Beta.Div</th>
+<th align="right">Biomass</th>
+<th align="right">FTD.UTC</th>
+<th align="right">RTD.UTC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Example1</td>
+<td align="right">1</td>
+<td align="left">landscape</td>
+<td align="left">Initial</td>
+<td align="right">12</td>
+<td align="right">3</td>
+<td align="right">1.7142857</td>
+<td align="right">305000.00</td>
+<td align="right">3</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Example1</td>
+<td align="right">1</td>
+<td align="left">landscape</td>
+<td align="left">Final</td>
+<td align="right">12</td>
+<td align="right">3</td>
+<td align="right">1.2000000</td>
+<td align="right">279315.09</td>
+<td align="right">3</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">Example1</td>
+<td align="right">1</td>
+<td align="left">landscape</td>
+<td align="left">Change</td>
+<td align="right">12</td>
+<td align="right">0</td>
+<td align="right">-0.5142857</td>
+<td align="right">-25684.91</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>The above results file summarizes the model’s initial state, final state, and change in state.<br /><strong>Scale</strong> Label for what portion of the landscape is considered. In this case, the entire landscape was examined. It is possible to consider a subset of the landscape to be summarized (e.g., to exclude large patches of unsuitable habitat from the calculations)<br /><strong>LastTime</strong> is an indicator that the model ran to completion, and should match the MaxTime option in the initial.conditions.file<br /><strong>Sp.Rich</strong> indicates species richness<br /><strong>Beta.Div</strong> indicates multiplicative beta diversity<br /><strong>Biomass</strong> indicates the total biomass present in the landscape<br /><strong>FTD.MVR</strong> indicates the functional trait richness based on Unique Trait Combinations. Both vital rates and response traits are included here.<br /><strong>RTD.MVR</strong> indicates the response trait richness. Only dispersal traits and response traits are considered here.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Next, we will consider the scenario-specific files.</span>
+epath =<span class="st"> &quot;spdem_ex1/Example1/&quot;</span>
+
+<span class="co">#SpeciesData.csv will contain species abundances of each lifestage (and all lifestages together) for every cell in the landscape.</span>
+sp.dat =<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">sprintf</span>(<span class="st">&quot;%sSpeciesData.csv&quot;</span>,epath))
+knitr::<span class="kw">kable</span>(<span class="kw">head</span>(sp.dat))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">LifeStage</th>
+<th align="right">Species</th>
+<th align="right">TimeStep</th>
+<th align="right">Cell1</th>
+<th align="right">Cell2</th>
+<th align="right">Cell3</th>
+<th align="right">Cell4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Seeds</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">384195.332</td>
+<td align="right">383576.781</td>
+<td align="right">383592.986</td>
+<td align="right">203705.0</td>
+</tr>
+<tr class="even">
+<td align="left">Juveniles</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">100000.000</td>
+<td align="right">100000.000</td>
+<td align="right">100000.000</td>
+<td align="right">0.0</td>
+</tr>
+<tr class="odd">
+<td align="left">Adults</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">5185.185</td>
+<td align="right">5185.185</td>
+<td align="right">5185.185</td>
+<td align="right">0.0</td>
+</tr>
+<tr class="even">
+<td align="left">ALL</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">489380.517</td>
+<td align="right">488761.966</td>
+<td align="right">488778.171</td>
+<td align="right">203705.0</td>
+</tr>
+<tr class="odd">
+<td align="left">Seeds</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">15367.813</td>
+<td align="right">15343.071</td>
+<td align="right">15343.719</td>
+<td align="right">8148.2</td>
+</tr>
+<tr class="even">
+<td align="left">Juveniles</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">50000.000</td>
+<td align="right">50000.000</td>
+<td align="right">50000.000</td>
+<td align="right">0.0</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#These data are summarized in the following files (in the Example1 folder):</span>
+<span class="co">#Cells_occupied.csv indicates how many cells are occupied by each species at each timestep</span>
+<span class="co">#SpeciesStats_Adults_v2.csv indicates how many adults of each species there is in the landscape for each timestep, and also the log of lambda (growth rate).</span>
+<span class="co">#SpeciesStats_All_v2.csv is the same as SpeciesStats_Adults_v2.csv, except for all life stages pooled.</span>
+<span class="co">#SpeciesStats_Juvs.csv indicates how many juveniles there are of each species in the landscape, but does not include loglambda values</span>
+<span class="co">#SpeciesStats_Seeds.csv as with juveniles, but for seeds</span>
+
+<span class="co">#One other file in this folder bears note: change_count_lookup.csv provides an index for which change steps correspond to which timesteps (because a change in environmental conditions may be less frequent than a change in timesteps).</span>
+
+
+<span class="co">#Finally, we will consider the diagnostic files.</span>
+dpath =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%sDiagnostics/&quot;</span>, epath)
+
+<span class="co">#There are four files in this folder:</span>
+<span class="co"># AMatrices.csv contains the entire matrix A for each species for each timestep. This can be useful for checking that vital rates are as intended and that the matrix was properly constructed.</span>
+
+<span class="co">#TransitionMatrices.csv gives the transition matrices within a cell for each cell in the landscape, and can be useful for examining local dynamics exclusive of immigration and emigration.</span>
+<span class="co"># AMatricesSummaries.csv summarizes the matrix content for each cell</span>
+mat.sum =<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">sprintf</span>(<span class="st">&quot;%sAMatricesSummaries.csv&quot;</span>,dpath))
+knitr::<span class="kw">kable</span>(<span class="kw">head</span>(mat.sum))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">ChangeStep</th>
+<th align="right">Species</th>
+<th align="right">Cell</th>
+<th align="right">Dominant.EigenValue</th>
+<th align="right">Per.Capita.Seeds.Exported</th>
+<th align="right">Per.Capita.Seeds.Imported</th>
+<th align="right">Prop.seeds.exported</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1.696044</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">1.696044</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">1.696044</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">0.100000</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">1.101390</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">1.101390</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">0.0815059</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#MatrixDiagnostics.csv summarizes the matrices across all cells for a species for each change step.</span>
+mat.dia =<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">sprintf</span>(<span class="st">&quot;%sMatrixDiagnostics.csv&quot;</span>,dpath))
+knitr::<span class="kw">kable</span>(mat.dia)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">ChangeStep</th>
+<th align="right">Species</th>
+<th align="right">A.Eigen</th>
+<th align="right">Is.Irreducible</th>
+<th align="right">Is.Ergodic</th>
+<th align="right">Max.Local.Eigen</th>
+<th align="right">Median.Local.Eigen</th>
+<th align="right">Min.Local.Eigen</th>
+<th align="right">Max.Seed.Export</th>
+<th align="right">Median.Seed.Export</th>
+<th align="right">Min.Seed.Export</th>
+<th align="right">Max.Seed.Import</th>
+<th align="right">Median.Seed.Import</th>
+<th align="right">Min.Seed.Import</th>
+<th align="right">Prop.Dispersing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1.728706</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.696044</td>
+<td align="right">1.6960440</td>
+<td align="right">0.1000000</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">1.108456</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.101390</td>
+<td align="right">1.1013899</td>
+<td align="right">0.9500000</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">1.762370</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1.728845</td>
+<td align="right">1.7288449</td>
+<td align="right">1.6198388</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">1.728706</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.696044</td>
+<td align="right">1.6960440</td>
+<td align="right">0.1000000</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">1.108456</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.101390</td>
+<td align="right">1.1013899</td>
+<td align="right">0.9500000</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">1.762370</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1.728845</td>
+<td align="right">1.7288449</td>
+<td align="right">1.6198388</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">1.728706</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.696044</td>
+<td align="right">1.6960440</td>
+<td align="right">0.1000000</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">1.108456</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.101390</td>
+<td align="right">1.1013899</td>
+<td align="right">0.9500000</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">1.762370</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1.728845</td>
+<td align="right">1.7288449</td>
+<td align="right">1.6198388</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">1.728706</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.696044</td>
+<td align="right">1.6960440</td>
+<td align="right">0.1000000</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">1.108456</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.101390</td>
+<td align="right">1.1013899</td>
+<td align="right">0.9500000</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">3</td>
+<td align="right">1.762370</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1.728845</td>
+<td align="right">1.7288449</td>
+<td align="right">1.6198388</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">1.728706</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.696044</td>
+<td align="right">1.6960440</td>
+<td align="right">0.1000000</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="right">1.108456</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.101390</td>
+<td align="right">1.1013899</td>
+<td align="right">0.9500000</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="right">1.762370</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1.728845</td>
+<td align="right">1.7288449</td>
+<td align="right">1.6198388</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">1</td>
+<td align="right">1.728706</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.696044</td>
+<td align="right">1.6960440</td>
+<td align="right">0.1000000</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">6</td>
+<td align="right">2</td>
+<td align="right">1.108456</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.101390</td>
+<td align="right">1.1013899</td>
+<td align="right">0.9500000</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="right">1.762370</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1.728845</td>
+<td align="right">1.7288449</td>
+<td align="right">1.6198388</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="right">1</td>
+<td align="right">0.100000</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.100000</td>
+<td align="right">0.0771447</td>
+<td align="right">0.0771447</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">7</td>
+<td align="right">2</td>
+<td align="right">1.108456</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.101390</td>
+<td align="right">1.1013899</td>
+<td align="right">0.9500000</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="right">3</td>
+<td align="right">1.619839</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1.619839</td>
+<td align="right">0.0716148</td>
+<td align="right">0.0716148</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="right">1</td>
+<td align="right">0.100000</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.100000</td>
+<td align="right">0.0771447</td>
+<td align="right">0.0771447</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="right">2</td>
+<td align="right">1.108456</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.101390</td>
+<td align="right">1.1013899</td>
+<td align="right">0.9500000</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="right">3</td>
+<td align="right">1.619839</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1.619839</td>
+<td align="right">0.0716148</td>
+<td align="right">0.0716148</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="right">1</td>
+<td align="right">1.728706</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.696044</td>
+<td align="right">1.6960440</td>
+<td align="right">0.1000000</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">9</td>
+<td align="right">2</td>
+<td align="right">1.108456</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.101390</td>
+<td align="right">1.1013899</td>
+<td align="right">0.9500000</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="right">3</td>
+<td align="right">1.762370</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1.728845</td>
+<td align="right">1.7288449</td>
+<td align="right">1.6198388</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="right">1</td>
+<td align="right">1.728706</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.696044</td>
+<td align="right">1.6960440</td>
+<td align="right">0.1000000</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">10</td>
+<td align="right">2</td>
+<td align="right">1.108456</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.101390</td>
+<td align="right">1.1013899</td>
+<td align="right">0.9500000</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="right">3</td>
+<td align="right">1.762370</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1.728845</td>
+<td align="right">1.7288449</td>
+<td align="right">1.6198388</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">1.728706</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.696044</td>
+<td align="right">1.6960440</td>
+<td align="right">0.1000000</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">11</td>
+<td align="right">2</td>
+<td align="right">1.108456</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.101390</td>
+<td align="right">1.1013899</td>
+<td align="right">0.9500000</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">11</td>
+<td align="right">3</td>
+<td align="right">1.762370</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1.728845</td>
+<td align="right">1.7288449</td>
+<td align="right">1.6198388</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">12</td>
+<td align="right">1</td>
+<td align="right">1.728706</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.696044</td>
+<td align="right">1.6960440</td>
+<td align="right">0.1000000</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">40.74100</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="odd">
+<td align="right">12</td>
+<td align="right">2</td>
+<td align="right">1.108456</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.101390</td>
+<td align="right">1.1013899</td>
+<td align="right">0.9500000</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">1.62964</td>
+<td align="right">0.0815059</td>
+</tr>
+<tr class="even">
+<td align="right">12</td>
+<td align="right">3</td>
+<td align="right">1.762370</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1.728845</td>
+<td align="right">1.7288449</td>
+<td align="right">1.6198388</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">32.59280</td>
+<td align="right">0.0815059</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="model-interpretation" class="section level2">
+<h2>Model Interpretation</h2>
+<p>In this section, we will take a closer look at some of the model outputs, and put them in the context of the ecology of our species.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#We'll start by looking at the SpeciesData.csv a bit more closely.</span>
+<span class="co">#Specifically, we'll look at the adult numbers for each species (rounded for ease of interpretation)</span>
+sp.dat.ad =<span class="st"> </span>sp.dat[sp.dat$LifeStage ==<span class="st"> &quot;Adults&quot;</span>, ]
+sp.dat.ad$LifeStage =<span class="st"> </span><span class="ot">NULL</span>
+<span class="co">#sp.dat.ad = sp.dat.ad[order(sp.dat.ad$Species), ]</span>
+sp.dat.ad1 =<span class="st"> </span>sp.dat.ad[sp.dat.ad$Species ==<span class="st"> </span><span class="dv">1</span>, ]
+sp.dat.ad2 =<span class="st"> </span>sp.dat.ad[sp.dat.ad$Species ==<span class="st"> </span><span class="dv">2</span>, ]
+sp.dat.ad3 =<span class="st"> </span>sp.dat.ad[sp.dat.ad$Species ==<span class="st"> </span><span class="dv">3</span>, ]
+
+knitr::<span class="kw">kable</span>(<span class="kw">round</span>(sp.dat.ad1,<span class="dv">0</span>)) <span class="co">#Examine Species 1 Adult data</span></code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Species</th>
+<th align="right">TimeStep</th>
+<th align="right">Cell1</th>
+<th align="right">Cell2</th>
+<th align="right">Cell3</th>
+<th align="right">Cell4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">3</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">5185</td>
+<td align="right">5185</td>
+<td align="right">5185</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">15</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">5235</td>
+<td align="right">5235</td>
+<td align="right">5235</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">27</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">4365</td>
+<td align="right">4359</td>
+<td align="right">4359</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">39</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">4288</td>
+<td align="right">4280</td>
+<td align="right">4280</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">51</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">4282</td>
+<td align="right">4273</td>
+<td align="right">4273</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">63</td>
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="right">4243</td>
+<td align="right">4213</td>
+<td align="right">4213</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">75</td>
+<td align="right">1</td>
+<td align="right">7</td>
+<td align="right">38</td>
+<td align="right">38</td>
+<td align="right">38</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">87</td>
+<td align="right">1</td>
+<td align="right">8</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">99</td>
+<td align="right">1</td>
+<td align="right">9</td>
+<td align="right">38</td>
+<td align="right">37</td>
+<td align="right">37</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">111</td>
+<td align="right">1</td>
+<td align="right">10</td>
+<td align="right">191</td>
+<td align="right">185</td>
+<td align="right">186</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">123</td>
+<td align="right">1</td>
+<td align="right">11</td>
+<td align="right">21</td>
+<td align="right">20</td>
+<td align="right">20</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">135</td>
+<td align="right">1</td>
+<td align="right">12</td>
+<td align="right">188</td>
+<td align="right">181</td>
+<td align="right">181</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>Looking at the data for Species 1, we see that it declined dramatically due to the herbicide application, and recovered slowly.</p>
+<pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(<span class="kw">round</span>(sp.dat.ad2,<span class="dv">0</span>)) <span class="co">#Examine Species 2 Adult data</span></code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Species</th>
+<th align="right">TimeStep</th>
+<th align="right">Cell1</th>
+<th align="right">Cell2</th>
+<th align="right">Cell3</th>
+<th align="right">Cell4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">7</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">4815</td>
+<td align="right">4815</td>
+<td align="right">4815</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">19</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">4765</td>
+<td align="right">4765</td>
+<td align="right">4765</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">31</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">4680</td>
+<td align="right">4680</td>
+<td align="right">4680</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">43</td>
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="right">4589</td>
+<td align="right">4589</td>
+<td align="right">4589</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">55</td>
+<td align="right">2</td>
+<td align="right">5</td>
+<td align="right">4500</td>
+<td align="right">4499</td>
+<td align="right">4499</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">67</td>
+<td align="right">2</td>
+<td align="right">6</td>
+<td align="right">4439</td>
+<td align="right">4437</td>
+<td align="right">4437</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">79</td>
+<td align="right">2</td>
+<td align="right">7</td>
+<td align="right">4380</td>
+<td align="right">4377</td>
+<td align="right">4377</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">91</td>
+<td align="right">2</td>
+<td align="right">8</td>
+<td align="right">4321</td>
+<td align="right">4316</td>
+<td align="right">4316</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">103</td>
+<td align="right">2</td>
+<td align="right">9</td>
+<td align="right">4263</td>
+<td align="right">4256</td>
+<td align="right">4256</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">115</td>
+<td align="right">2</td>
+<td align="right">10</td>
+<td align="right">4913</td>
+<td align="right">4888</td>
+<td align="right">4889</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">127</td>
+<td align="right">2</td>
+<td align="right">11</td>
+<td align="right">5519</td>
+<td align="right">5477</td>
+<td align="right">5478</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">139</td>
+<td align="right">2</td>
+<td align="right">12</td>
+<td align="right">6084</td>
+<td align="right">6026</td>
+<td align="right">6027</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>Species 2 has only been able to weakly invade the grassland habitat, despite the grassland habitat being more suitable. This is due to competition from Species 1 and Species 2 because the system is at carrying capacity. Once the herbicides are applied, Species 2 is able to respond to the empty niche, and responds more rapidly than Species 1 because of the source population in the forest.</p>
+<pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(<span class="kw">round</span>(sp.dat.ad3,<span class="dv">0</span>)) <span class="co">#Examine Species 3 Adult data</span></code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Species</th>
+<th align="right">TimeStep</th>
+<th align="right">Cell1</th>
+<th align="right">Cell2</th>
+<th align="right">Cell3</th>
+<th align="right">Cell4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">11</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">650</td>
+</tr>
+<tr class="even">
+<td align="left">23</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">725</td>
+</tr>
+<tr class="odd">
+<td align="left">35</td>
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">4</td>
+<td align="right">11</td>
+<td align="right">11</td>
+<td align="right">1832</td>
+</tr>
+<tr class="even">
+<td align="left">47</td>
+<td align="right">3</td>
+<td align="right">4</td>
+<td align="right">8</td>
+<td align="right">19</td>
+<td align="right">19</td>
+<td align="right">2584</td>
+</tr>
+<tr class="odd">
+<td align="left">59</td>
+<td align="right">3</td>
+<td align="right">5</td>
+<td align="right">10</td>
+<td align="right">24</td>
+<td align="right">24</td>
+<td align="right">3041</td>
+</tr>
+<tr class="even">
+<td align="left">71</td>
+<td align="right">3</td>
+<td align="right">6</td>
+<td align="right">27</td>
+<td align="right">64</td>
+<td align="right">63</td>
+<td align="right">4030</td>
+</tr>
+<tr class="odd">
+<td align="left">83</td>
+<td align="right">3</td>
+<td align="right">7</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4700</td>
+</tr>
+<tr class="even">
+<td align="left">95</td>
+<td align="right">3</td>
+<td align="right">8</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">5103</td>
+</tr>
+<tr class="odd">
+<td align="left">107</td>
+<td align="right">3</td>
+<td align="right">9</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">5407</td>
+</tr>
+<tr class="even">
+<td align="left">119</td>
+<td align="right">3</td>
+<td align="right">10</td>
+<td align="right">265</td>
+<td align="right">643</td>
+<td align="right">633</td>
+<td align="right">5887</td>
+</tr>
+<tr class="odd">
+<td align="left">131</td>
+<td align="right">3</td>
+<td align="right">11</td>
+<td align="right">419</td>
+<td align="right">1015</td>
+<td align="right">1000</td>
+<td align="right">6132</td>
+</tr>
+<tr class="even">
+<td align="left">143</td>
+<td align="right">3</td>
+<td align="right">12</td>
+<td align="right">515</td>
+<td align="right">1248</td>
+<td align="right">1229</td>
+<td align="right">6252</td>
+</tr>
+</tbody>
+</table>
+<p>Species 3 shows a slight initial decline, because the model was initialized slightly above carrying capacity. When the population of Species 2 is reduced by the herbicide, Species 3 increases, but not as rapidly as Species 2 in proportion to its landscape-wide population due to its slower growth rate. However, its absolute numerical increase is greater than that for Species 2.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Graphically examine the overall patterns by species</span>
+<span class="co"># Read in SpeciesStats_Adults_v2.csv</span>
+ssa =<span class="st"> &quot;spdem_ex1/Example1/SpeciesStats_Adults_v2.csv&quot;</span>
+my.df =<span class="st"> </span><span class="kw">read.csv</span>(ssa)
+
+x.limit =<span class="st"> </span><span class="dv">15</span>
+y.limit =<span class="st"> </span><span class="dv">20000</span>
+
+<span class="co">#Plot Species 1</span>
+<span class="kw">plot</span>(my.df$RunTime, my.df$Sp1, <span class="dt">xlab =</span> <span class="st">&quot;Time Step&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Number of Adults&quot;</span>, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,x.limit), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, y.limit), <span class="dt">pch =</span> <span class="dv">15</span>, <span class="dt">col =</span> <span class="dv">4</span>)
+
+<span class="kw">par</span>(<span class="dt">new =</span> T) <span class="co">#Tell R to add next plot to existing plot</span>
+
+<span class="co">#Plot Species 2</span>
+<span class="kw">plot</span>(my.df$RunTime, my.df$Sp2, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,x.limit), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, y.limit), <span class="dt">pch =</span> <span class="dv">16</span>, <span class="dt">col =</span> <span class="dv">2</span>, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">xaxt =</span> <span class="st">'n'</span>, <span class="dt">yaxt =</span> <span class="st">'n'</span>)
+
+<span class="kw">par</span>(<span class="dt">new =</span> T) <span class="co">#Tell R to add next plot to existing plot</span>
+
+<span class="co">#Plot Species 3</span>
+<span class="kw">plot</span>(my.df$RunTime, my.df$Sp3, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,x.limit), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, y.limit), <span class="dt">pch =</span> <span class="dv">17</span>, <span class="dt">col =</span> <span class="dv">3</span>, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">xaxt =</span> <span class="st">'n'</span>, <span class="dt">yaxt =</span> <span class="st">'n'</span>)
+
+## Examine Species 3's performance by cell
+x.limit =<span class="st"> </span><span class="dv">15</span>
+y.limit =<span class="st"> </span><span class="kw">log</span>(<span class="dv">7000</span>,<span class="dv">10</span>)
+
+<span class="co">#Plot Cell1</span>
+<span class="kw">plot</span>(sp.dat.ad3$TimeStep,<span class="kw">log</span>(sp.dat.ad3$Cell1,<span class="dv">10</span>), <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,x.limit), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>,y.limit), <span class="dt">pch =</span> <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Time Step&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Log10 Number of Adults&quot;</span> )
+
+<span class="co">#Plot Cells 2 - 4</span>
+for (i in <span class="dv">2</span>:<span class="dv">4</span>){
+    pch.vec =<span class="st"> </span><span class="kw">c</span>(<span class="ot">NA</span>,<span class="dv">6</span>,<span class="dv">20</span>,<span class="dv">0</span>)
+    <span class="kw">par</span>(<span class="dt">new =</span> T) <span class="co">#Tell R to add next plot to existing plot</span>
+    this.cell =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;Cell%s&quot;</span>, i)
+    <span class="kw">plot</span>(sp.dat.ad3$TimeStep, <span class="kw">log</span>(sp.dat.ad3[[this.cell]],<span class="dv">10</span>), <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,x.limit), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, y.limit), <span class="dt">pch =</span> pch.vec[i], <span class="dt">col =</span> i, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">xaxt =</span> <span class="st">'n'</span>, <span class="dt">yaxt =</span> <span class="st">'n'</span>)
+    }</code></pre>
+<p><img src="data:image/png;base64,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" /> <img src="data:image/png;base64,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" /></p>
+<p>The first plot shows the patterns described above, while the second plot shows the importance of space. Cell 4 serves as a reference - this is the population unaffected by herbicides. The other three Cells all increase, but Cells 1 and 3 increase faster because they receive more propagules due to their greater proximity to Cell 4.</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

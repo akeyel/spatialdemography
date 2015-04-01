@@ -1,0 +1,2 @@
+Scenario,ModelName,Extent,Edge.Type,MaxTime,K_g,multi.species.K,competitiontype,microsites,invasion,num.invaders,cells.to.invade,invader.repro.proportion,num.adults,Tot.sp.rich,Land.sp.rich,Loc.sp.rich,Tot.rtd,Land.rtd,Loc.rtd
+1,TestRun4,1,ABSORBING,100,100000,0,0,NA,0,NA,NA,NA,100,1,1,1,NA,NA,NA
