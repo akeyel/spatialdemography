@@ -10,6 +10,7 @@ No option to change rounding in calculation of UTC response trait diversity
 
 #Changes in 0.10.2.9999
 Added stochastic lottery model as a competitiontype option
+Began using Git for version control and collaborative development with Sten.
 
 #Changes in 0.10.2
 Removed Flags from code and dealt with flagged issues where appropriate
