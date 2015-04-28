@@ -30,8 +30,8 @@
 #' @details \tabular{ll}{ %% Note tabular{ll} is tabular{lowercase(LL)} not tabular{11} 
 #' Package: \tab spatialdemography\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.10.2\cr
-#' Date: \tab 2015-03-12\cr
+#' Version: \tab 0.10.3\cr
+#' Date: \tab 2015-04-02\cr
 #' License: \tab GPL-2 (or later)\cr
 #' }
 #' @author Alexander "Sasha" Keyel & Jakob L.K. Gerstenlauer\cr
@@ -336,12 +336,7 @@ is.ergodic=function(x){
 check.packages = function(out.metrics, include.copula){
 
     missing.pkg = 0
-    
-    if (!require(Matrix)){
-        warning("Please install package 'Matrix', install.packages('Matrix')")
-        missing.pkg = 1
-        }
-    
+
     #Check outmetrics if multirich or FD will be required
     for (item in out.metrics){
         test = substring(item,nchar(item) - 2,nchar(item))
@@ -4735,129 +4730,129 @@ compile.log.lambdas = function(in.lists,out.file){
     write.table(my.dat, file = out.file, row.names = F, sep = ",")
     }
 
-#' Make final graphs
-#'
-#' THIS FUNCTION IS IN PROGRESS
-#'
-#' @param in.pdf The file to be generated
-#' @param ResultsFile The file that results will be written to.
-#' @param cover.levels The percent cover of each layer type
-#' @param s.lbl a label
-#'
-make.final.graphs = function(in.pdf,ResultsFile,cover.levels,s.lbl){
-    
-    stop("This function has not been  updated and should not be used")
-    
-    if (!require(Hmisc)){ stop("Please install Hmisc: install.packages('Hmisc')") }
-    
-    # For testing purposes
-    #setwd("C:/docs/beplants/Scripts/")
-    #ResultsFile = "outputs/Results_RTD_for_graph.csv"
-    #in.pdf = "outputs/Plots_RTD_testing1.pdf"
-    #cover.levels = c(100/p,50,100)
-    #s.lbl = c("TD","L1L2","L1L4","L2L2","L2L4","L4L4")
-    
-    trt = length(s.lbl) #number of different treatments/scenarios
-    
-    #Read in results written to file
-    all.data = read.csv(ResultsFile)
-
-    #These will not be aggregated properly and might as well be dropped:
-    all.data$Scenario = NULL
-    all.data$microsites = NULL #I don't care about this for now, and the NA's give me warnings
-
-    #Get limits for dependent variables for plotting purposes
-    mins = apply(all.data,2,min,na.rm = T)  # NOTE:  All fields need to be numeric, or R converts all of these to text, and botches the min/max calculations
-    maxes = apply(all.data,2,max, na.rm = T) #NOTE:  All fields need to be numeric, or R converts all of these to text, and botches the min/max calculations
-
-
-    #Subset all.data to get sample sizes by group of interest.  This really should be done by the aggregate function, but apparently it is defective!
-    n.mat = matrix(rep(NA,(trt * length(cover.levels))),nrow = trt) #hold results for sample sizes
-    for (r in 1:trt){
-        n.subset = all.data[all.data$Scenario.Number == r, ]
-        for (ec in 0:1){ #NOTE: Currently only set up for 2 levels of environmental change!
-            n.subset2 = n.subset[n.subset$Env.Change == ec, ]    
-            for (cc in 1:length(cover.levels)){
-                lvl = cover.levels[cc]
-                n.subset3 = n.subset2[n.subset2$Percent.Cover == lvl, ]
-                this.n = nrow(n.subset3)
-                n.mat[r,cc] = this.n
-                }
-            }
-        }
-            
-    # Note: all scenarios should be run for an equal number of times, so the n should be the same for all.
-    print("this matrix should have all the same number.  If not, the sample sizes are uneven, and the confidence intervals will be wrong!")
-    print(n.mat) #Visually check assumption that all n are equal
-    n.actual = n.mat[1,1] 
-           
-    #Aggregate data into data points by scenario and Percent Cover
-    scn.num = all.data$Scenario.Number
-    all.data$Scenario.Number = NULL #Remove from data frame after making a separate column for aggregation
-    frag = all.data$Percent.Cover
-    all.data$Percent.Cover = NULL #Remove data from data frame after making a separate column
-    enviro.change = all.data$Env.Change 
-    all.data$Env.Change = NULL
-        
-    #Actually aggregate the data
-    mean.data = aggregate(all.data,list(scn.num,frag,enviro.change),mean)
-    sd.data = aggregate(all.data,list(scn.num,frag,enviro.change),sd)
-    #ci.data = (sd.data * 1.96)/sqrt(n.actual) #95% CI as (sd * 1.96) / sqrt(n).  I thought there was a sqrt(n-1) for something, but it is not given in Zar (or Wikipedia)
-    
-    #Create a pdf file to hold the graphical outputs
-    pdf(file = in.pdf)
-    
-    #Make a separate plot for each of the dependent variables of interest
-    iv.vec = c("landscape.Sp.Rich.Final","landscape.Beta.Div.Final","landscape.Biomass.Final","landscape.FTD.UTC.Final","landscape.RTD.UTC.Final","landscape.RTD.UTC.Change") #Change plotted for RTD, because initial conditions are not equal
-    for (iv in iv.vec){
-        
-        #Loop through environmental change
-        for (ec in 0:1){
-            #Subset data to be homogeneous for environmental change type
-            ec.mean.data = mean.data[mean.data$Group.3 == ec, ]
-            ec.sd.data = sd.data[sd.data$Group.3 == ec, ]
-            
-            #Make separate plots for each variable
-            first = 1
-            
-            #Loop through scenarios, and put in the same plot with a legend
-            for (r in 1:trt){
-                
-                #Subset data to only relevant data
-                mean.subset = ec.mean.data[ec.mean.data$Group.1 == r, ]
-                sd.subset = ec.sd.data[ec.sd.data$Group.1 == r, ]
-                xx = mean.subset$Group.2
-                yy = mean.subset[[iv]]
-                ci = (sd.subset[[iv]] * 1.96) /sqrt(n.actual)
-                
-                #Add in a slight off-set so points are not right on top of one another
-                xx = xx + (r - 3.5) #r - 3.5 is so that the points are centered around the actual value
-                
-                ymin = mins[[iv]]
-                ymax = maxes[[iv]]
-                
-                #Special legend plotting
-                legend.loc = "bottomright" #set this as default, will work for most plots
-                if (iv == "landscape.Beta.Div.Final"){
-                    legend.loc = "topright"
-                    }
-                
-                if (first == 1){
-                    my.xlab = sprintf("Habitat Cover (%s), Environmental Change = %s","%",ec) #NOTE: The % alone crashes the function, because it thinks you forgot a letter - hence why it is put in via substitution.
-                    plot(yy ~ xx,xlim = c(0,105),xlab = my.xlab,ylim = c(ymin,ymax),ylab = sprintf("%s",iv), col = r) #Figure out how to fill backgrounds, think about drawing lines
-                    legend(x = legend.loc,legend = s.lbl, col = seq(1,trt,1),pch = 16)
-                } else {
-                    points(yy ~ xx, col = r)
-                    }
-                Hmisc::errbar(xx,yy, yy + ci, yy - ci, add = T, pch = 16, cap = .01,col = r, errbar.col = r) #errbar is from Hmisc
-                    
-                first = 0 #Control what happens on the first run through the loop - here it gets turned off until the next iv variable
-                }
-            }
-        }
-    #Stop writing to the pdf.
-    dev.off()
-    }
+## Make final graphs
+##
+## THIS FUNCTION IS IN PROGRESS
+##
+## @param in.pdf The file to be generated
+## @param ResultsFile The file that results will be written to.
+## @param cover.levels The percent cover of each layer type
+## @param s.lbl a label
+##
+#make.final.graphs = function(in.pdf,ResultsFile,cover.levels,s.lbl){
+#    
+#    stop("This function has not been  updated and should not be used")
+#    
+#    if (!require(Hmisc)){ stop("Please install Hmisc: install.packages('Hmisc')") }
+#    
+#    # For testing purposes
+#    #setwd("C:/docs/beplants/Scripts/")
+#    #ResultsFile = "outputs/Results_RTD_for_graph.csv"
+#    #in.pdf = "outputs/Plots_RTD_testing1.pdf"
+#    #cover.levels = c(100/p,50,100)
+#    #s.lbl = c("TD","L1L2","L1L4","L2L2","L2L4","L4L4")
+#    
+#    trt = length(s.lbl) #number of different treatments/scenarios
+#    
+#    #Read in results written to file
+#    all.data = read.csv(ResultsFile)
+#
+#    #These will not be aggregated properly and might as well be dropped:
+#    all.data$Scenario = NULL
+#    all.data$microsites = NULL #I don't care about this for now, and the NA's give me warnings
+#
+#    #Get limits for dependent variables for plotting purposes
+#    mins = apply(all.data,2,min,na.rm = T)  # NOTE:  All fields need to be numeric, or R converts all of these to text, and botches the min/max calculations
+#    maxes = apply(all.data,2,max, na.rm = T) #NOTE:  All fields need to be numeric, or R converts all of these to text, and botches the min/max calculations
+#
+#
+#    #Subset all.data to get sample sizes by group of interest.  This really should be done by the aggregate function, but apparently it is defective!
+#    n.mat = matrix(rep(NA,(trt * length(cover.levels))),nrow = trt) #hold results for sample sizes
+#    for (r in 1:trt){
+#        n.subset = all.data[all.data$Scenario.Number == r, ]
+#        for (ec in 0:1){ #NOTE: Currently only set up for 2 levels of environmental change!
+#            n.subset2 = n.subset[n.subset$Env.Change == ec, ]    
+#            for (cc in 1:length(cover.levels)){
+#                lvl = cover.levels[cc]
+#                n.subset3 = n.subset2[n.subset2$Percent.Cover == lvl, ]
+#                this.n = nrow(n.subset3)
+#                n.mat[r,cc] = this.n
+#                }
+#            }
+#        }
+#            
+#    # Note: all scenarios should be run for an equal number of times, so the n should be the same for all.
+#    print("this matrix should have all the same number.  If not, the sample sizes are uneven, and the confidence intervals will be wrong!")
+#    print(n.mat) #Visually check assumption that all n are equal
+#    n.actual = n.mat[1,1] 
+#           
+#    #Aggregate data into data points by scenario and Percent Cover
+#    scn.num = all.data$Scenario.Number
+#    all.data$Scenario.Number = NULL #Remove from data frame after making a separate column for aggregation
+#    frag = all.data$Percent.Cover
+#    all.data$Percent.Cover = NULL #Remove data from data frame after making a separate column
+#    enviro.change = all.data$Env.Change 
+#    all.data$Env.Change = NULL
+#        
+#    #Actually aggregate the data
+#    mean.data = aggregate(all.data,list(scn.num,frag,enviro.change),mean)
+#    sd.data = aggregate(all.data,list(scn.num,frag,enviro.change),sd)
+#    #ci.data = (sd.data * 1.96)/sqrt(n.actual) #95% CI as (sd * 1.96) / sqrt(n).  I thought there was a sqrt(n-1) for something, but it is not given in Zar (or Wikipedia)
+#    
+#    #Create a pdf file to hold the graphical outputs
+#    pdf(file = in.pdf)
+#    
+#    #Make a separate plot for each of the dependent variables of interest
+#    iv.vec = c("landscape.Sp.Rich.Final","landscape.Beta.Div.Final","landscape.Biomass.Final","landscape.FTD.UTC.Final","landscape.RTD.UTC.Final","landscape.RTD.UTC.Change") #Change plotted for RTD, because initial conditions are not equal
+#    for (iv in iv.vec){
+#        
+#        #Loop through environmental change
+#        for (ec in 0:1){
+#            #Subset data to be homogeneous for environmental change type
+#            ec.mean.data = mean.data[mean.data$Group.3 == ec, ]
+#            ec.sd.data = sd.data[sd.data$Group.3 == ec, ]
+#            
+#            #Make separate plots for each variable
+#            first = 1
+#            
+#            #Loop through scenarios, and put in the same plot with a legend
+#            for (r in 1:trt){
+#                
+#                #Subset data to only relevant data
+#                mean.subset = ec.mean.data[ec.mean.data$Group.1 == r, ]
+#                sd.subset = ec.sd.data[ec.sd.data$Group.1 == r, ]
+#                xx = mean.subset$Group.2
+#                yy = mean.subset[[iv]]
+#                ci = (sd.subset[[iv]] * 1.96) /sqrt(n.actual)
+#                
+#                #Add in a slight off-set so points are not right on top of one another
+#                xx = xx + (r - 3.5) #r - 3.5 is so that the points are centered around the actual value
+#                
+#                ymin = mins[[iv]]
+#                ymax = maxes[[iv]]
+#                
+#                #Special legend plotting
+#                legend.loc = "bottomright" #set this as default, will work for most plots
+#                if (iv == "landscape.Beta.Div.Final"){
+#                    legend.loc = "topright"
+#                    }
+#                
+#                if (first == 1){
+#                    my.xlab = sprintf("Habitat Cover (%s), Environmental Change = %s","%",ec) #NOTE: The % alone crashes the function, because it thinks you forgot a letter - hence why it is put in via substitution.
+#                    plot(yy ~ xx,xlim = c(0,105),xlab = my.xlab,ylim = c(ymin,ymax),ylab = sprintf("%s",iv), col = r) #Figure out how to fill backgrounds, think about drawing lines
+#                    legend(x = legend.loc,legend = s.lbl, col = seq(1,trt,1),pch = 16)
+#                } else {
+#                    points(yy ~ xx, col = r)
+#                    }
+#                Hmisc::errbar(xx,yy, yy + ci, yy - ci, add = T, pch = 16, cap = .01,col = r, errbar.col = r) #errbar is from Hmisc
+#                    
+#                first = 0 #Control what happens on the first run through the loop - here it gets turned off until the next iv variable
+#                }
+#            }
+#        }
+#    #Stop writing to the pdf.
+#    dev.off()
+#    }
 
 #' Prep diagnostic output
 #'
@@ -5797,36 +5792,37 @@ get.cors = function(qr.cor.out, RunID, d2, cor.vars){
     return(cors.results)
     }
 
-#' Quantile regression helper function
-#'
-#' Helper function to implement the quantile regression
-#'
-#' @param d2 A data frame
-#' @param qr.results Results
-#' @param Response Response
-#' @param Predictor Predictor
-#' @param this.quantile The quantile of interest
-#' @param counter A counter
-#'
-do.qr = function(d2,qr.results,Response,Predictor, this.quantile,counter){
-    #Load required packages
-    if (!require(quantreg)){ stop("Please install quantreg: install.packages('quantreg')") }
-
-    Formula<- as.formula(paste(Response," ~ ",Predictor,sep=""))
-    model.qr<-quantreg::rq( Formula, tau = this.quantile, data=d2);
-
-    SummaryObject<-summary(model.qr)
-
-    Slope<-SummaryObject$coefficients[2,1]
-    StandardError<-SummaryObject$coefficients[2,2]
-
-    Response.SE = sprintf("%s.SE",Response)
-
-    qr.results[[Response]][counter] = Slope
-    qr.results[[Response.SE]][counter] = StandardError
-
-    return(qr.results)
-    }
+## Add ' back when reenabling function to renable roxygen
+## Quantile regression helper function
+##
+## Helper function to implement the quantile regression
+##
+## @param d2 A data frame
+## @param qr.results Results
+## @param Response Response
+## @param Predictor Predictor
+## @param this.quantile The quantile of interest
+## @param counter A counter
+##
+#do.qr = function(d2,qr.results,Response,Predictor, this.quantile,counter){
+#    #Load required packages
+#    if (!require(quantreg)){ stop("Please install quantreg: install.packages('quantreg')") }
+#
+#    Formula<- as.formula(paste(Response," ~ ",Predictor,sep=""))
+#    model.qr<-quantreg::rq( Formula, tau = this.quantile, data=d2);
+#
+#    SummaryObject<-summary(model.qr)
+#
+#    Slope<-SummaryObject$coefficients[2,1]
+#    StandardError<-SummaryObject$coefficients[2,2]
+#
+#    Response.SE = sprintf("%s.SE",Response)
+#
+#    qr.results[[Response]][counter] = Slope
+#    qr.results[[Response.SE]][counter] = StandardError
+#
+#    return(qr.results)
+#    }
 
 #DD# Where does this function fit in?
 #DD# How should it be implemented? Option in code or as a separate thing to run after code is completed?
@@ -5835,95 +5831,96 @@ do.qr = function(d2,qr.results,Response,Predictor, this.quantile,counter){
 #DD# So, you'd need an extraction code to get the info of interest
 #DD# Then you need to run the analysis
 #DD# Then you need to output the results.
-#' Implement quantile regression
-#'
-#' Implement quantile regression
-#' %% Re-enable this line when code is functional and properly integrated: @export quant.reg
-#'
-#' @param qr.out File to which the results should be written. Needs to already exist with header information (created earlier in the code)
-#' @param RunID ID to join to global scenario conditions
-#' @param d2 Input dataframe containing values
-#' @param qr.vars A list of variables in the dataframe to use in quantile regression
-#' @param quantiles The quantiles at which to do the evaluations
-#'
-quant.reg = function(qr.out, RunID, d2,qr.vars,quantiles){
-    
-    quant.vals = sort(rep(quantiles,length(qr.vars))) # Get a vector with the quantile values for assigning to results
-    size = length(qr.vars) * length(quantiles) #Get a length variable for use in setting up dataframe
-    qr.results = data.frame(RunID = rep(RunID, size), Predictor = rep(qr.vars,length(quantiles)), Quantile = quant.vals, LogLambda.z = rep(NA,size),LogLambda.z.SE = rep(NA,size), COV.z = rep(NA,size),COV.z.SE = rep(NA,size))
-    
-    counter = 0
-    #Loop through quantiles
-    for (i in 1:length(quantiles)){
-        this.quantile = quant.vals[i]
-    
-        #Loop through variables
-        for (j in 1:length(qr.vars)){
-            counter = counter + 1 #Keep an index of what row the results should be written to.
-
-            #First add the target predictor
-            TargetPredictor = qr.vars[j]
-            
-            #then add all other predictors
-            Predictor = TargetPredictor
-            for (ii in 1:length(qr.vars)){
-                if (ii!=j){Predictor <-paste(Predictor," + ",qr.vars[ii],sep="")}
-                }
-            
-            Responses = c("LogLambda.z","COV.z")
-            for (Response in Responses){
-                qr.results = do.qr(d2,qr.results,Response,Predictor, this.quantile,counter)
-                }
-            LL.Response  <- "LogLambda.z";            
-            }
-        }
-    
-    write.table(qr.results, file = qr.out, row.names = F, append = F)
-    return(qr.results)
-    }
-
-#' Implement boosted quantile regression
-#'
-#' Implement boosted quantile regression
-#'
-#' @param bqr.out bqr.out
-#' @param RunID The run id
-#' @param d2 A data frame
-#' @param bqr.vars Variables to include in boosted quantile regression
-#' @param quantiles The quantiles to evaluate at
-#' @param NumberOfTrees Number of trees to use in Boosted Quantile Regression.
-#' 10,000 is suggested as a default. #DD# Look up source from main MS.
-boost.quant.reg = function(bqr.out, RunID, d2, bqr.vars, quantiles,NumberOfTrees=10000){
-    if (!require(gbm)){ stop("Please install gbm: install.packages('gbm')") }
-    
-    #Set up subset of data for analysis
-    ndata.LL = na.omit(subset(d2, select= c(bqr.vars,"LogLambda")))
-    ndata.COV = na.omit(subset(d2, select = c(bqr.vars,"COV")))
-        
-    #Loop through quantiles
-    for (this.quantile in quantiles){
-        LL.gbm = gbm::gbm(LogLambda ~ .,distribution=list(name="quantile",alpha=this.quantile), verbose=FALSE, interaction.depth=3, n.trees = NumberOfTrees, data=ndata.LL)
-        LL.summary = summary(LL.gbm)
-        LL.summary = LL.summary[ order(LL.summary$var) , ] #bring var into alphabetical order
-        
-        COV.gbm = gbm::gbm(COV ~ .,distribution=list(name="quantile",alpha=this.quantile), verbose=FALSE, interaction.depth=3, n.trees = NumberOfTrees, data=ndata.COV)
-        COV.summary = summary(COV.gbm)
-        COV.summary = COV.summary[ order(COV.summary$var) , ] #bring var into alphabetical order
-
-        #create a data frame from these results
-        size = length(bqr.vars)
-        bqr.sub = data.frame(RunID = rep(RunID, size), Predictor = sort(bqr.vars), Quantile = rep(this.quantile,size), RelImp.LogLambda = LL.summary[ ,2], RelImp.COV = COV.summary[ ,2])
-        
-        if (!exists("bqr.results")){
-            bqr.results = bqr.sub
-        }else{
-            bqr.results = merge(bqr.results, bqr.sub, all = T)
-            }
-        }
-
-    write.table(bqr.results, file = bqr.out, row.names = F, append = F, sep = ",")
-    return(bqr.results)
-    }
+# Implement quantile regression
+#
+# Implement quantile regression
+# %% Re-enable this line when code is functional and properly integrated: @export quant.reg
+#
+# @param qr.out File to which the results should be written. Needs to already exist with header information (created earlier in the code)
+# @param RunID ID to join to global scenario conditions
+# @param d2 Input dataframe containing values
+# @param qr.vars A list of variables in the dataframe to use in quantile regression
+# @param quantiles The quantiles at which to do the evaluations
+#
+#quant.reg = function(qr.out, RunID, d2,qr.vars,quantiles){
+#    
+#    quant.vals = sort(rep(quantiles,length(qr.vars))) # Get a vector with the quantile values for assigning to results
+#    size = length(qr.vars) * length(quantiles) #Get a length variable for use in setting up dataframe
+#    qr.results = data.frame(RunID = rep(RunID, size), Predictor = rep(qr.vars,length(quantiles)), Quantile = quant.vals, LogLambda.z = rep(NA,size),LogLambda.z.SE = rep(NA,size), COV.z = rep(NA,size),COV.z.SE = rep(NA,size))
+#    
+#    counter = 0
+#    #Loop through quantiles
+#    for (i in 1:length(quantiles)){
+#        this.quantile = quant.vals[i]
+#    
+#        #Loop through variables
+#        for (j in 1:length(qr.vars)){
+#            counter = counter + 1 #Keep an index of what row the results should be written to.
+#
+#            #First add the target predictor
+#            TargetPredictor = qr.vars[j]
+#            
+#            #then add all other predictors
+#            Predictor = TargetPredictor
+#            for (ii in 1:length(qr.vars)){
+#                if (ii!=j){Predictor <-paste(Predictor," + ",qr.vars[ii],sep="")}
+#                }
+#            
+#            Responses = c("LogLambda.z","COV.z")
+#            for (Response in Responses){
+#                qr.results = do.qr(d2,qr.results,Response,Predictor, this.quantile,counter)
+#                }
+#            LL.Response  <- "LogLambda.z";            
+#            }
+#        }
+#    
+#    write.table(qr.results, file = qr.out, row.names = F, append = F)
+#    return(qr.results)
+#    }
+#
+#Add ' back to reenable roxygen documentation
+## Implement boosted quantile regression
+##
+## Implement boosted quantile regression
+##
+## @param bqr.out bqr.out
+## @param RunID The run id
+## @param d2 A data frame
+## @param bqr.vars Variables to include in boosted quantile regression
+## @param quantiles The quantiles to evaluate at
+## @param NumberOfTrees Number of trees to use in Boosted Quantile Regression.
+## 10,000 is suggested as a default. #DD# Look up source from main MS.
+#boost.quant.reg = function(bqr.out, RunID, d2, bqr.vars, quantiles,NumberOfTrees=10000){
+#    if (!require(gbm)){ stop("Please install gbm: install.packages('gbm')") }
+#    
+#    #Set up subset of data for analysis
+#    ndata.LL = na.omit(subset(d2, select= c(bqr.vars,"LogLambda")))
+#    ndata.COV = na.omit(subset(d2, select = c(bqr.vars,"COV")))
+#        
+#    #Loop through quantiles
+#    for (this.quantile in quantiles){
+#        LL.gbm = gbm::gbm(LogLambda ~ .,distribution=list(name="quantile",alpha=this.quantile), verbose=FALSE, interaction.depth=3, n.trees = NumberOfTrees, data=ndata.LL)
+#        LL.summary = summary(LL.gbm)
+#        LL.summary = LL.summary[ order(LL.summary$var) , ] #bring var into alphabetical order
+#        
+#        COV.gbm = gbm::gbm(COV ~ .,distribution=list(name="quantile",alpha=this.quantile), verbose=FALSE, interaction.depth=3, n.trees = NumberOfTrees, data=ndata.COV)
+#        COV.summary = summary(COV.gbm)
+#        COV.summary = COV.summary[ order(COV.summary$var) , ] #bring var into alphabetical order
+#
+#        #create a data frame from these results
+#        size = length(bqr.vars)
+#        bqr.sub = data.frame(RunID = rep(RunID, size), Predictor = sort(bqr.vars), Quantile = rep(this.quantile,size), RelImp.LogLambda = LL.summary[ ,2], RelImp.COV = COV.summary[ ,2])
+#        
+#        if (!exists("bqr.results")){
+#            bqr.results = bqr.sub
+#        }else{
+#            bqr.results = merge(bqr.results, bqr.sub, all = T)
+#            }
+#        }
+#
+#    write.table(bqr.results, file = bqr.out, row.names = F, append = F, sep = ",")
+#    return(bqr.results)
+#    }
 
 #**# NEED TO READ UP ON QUANTILE REGRESSION AND BOOSTED QUANTILE REGRESSION!!!
 #**# THIS FUNCTION NEEDS REVISING/FIXING (need to add in annotation for roxygen2 as well. But it was doing something weird!

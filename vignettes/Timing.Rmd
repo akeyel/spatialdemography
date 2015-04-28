@@ -23,42 +23,52 @@ The code includes an example for how to run multiple scenarios in parallel using
 In order to run SpatialDemography, we need to set up several variables to ensure that the code runs properly. Mainly these inputs have to do with paths and file locations.
 
 ```{r}
-# Optionally set the working directory. The working directory should default to the vignettes directory. If it is changed, some of the inputs from the input files will need to be copied into the changed directory.
+# Optionally set the working directory. The working directory should default to
+# the vignettes directory. If it is changed, some of the inputs from the input 
+# files will need to be copied into the changed directory.
 #setwd("C:/docs/beplants/Scripts/spatialdemography/vignettes") 
 
 #Load the spatialdemography package
 library(spatialdemography)
-    }
 
-# Set up a RunName. Not actually an input, but we'll use it to build some of the required inputs
+# Set up a RunName.
+# Not actually an input, but we'll use it to build some of the required inputs
 run.name = "spdem_timing"
 
-# DispPath The path of the dispersal tables (if existing) or the path where dispersal tables should be created.
-# Note that dispersal tables may take a long time to generate, so it is often desirable to share the same dispersal tables across multiple models.
+# DispPath The path of the dispersal tables (if existing)
+# or the path where dispersal tables should be created.
+# Note that dispersal tables may take a long time to generate, so it is often
+# desirable to share the same dispersal tables across multiple models.
 DispPath = "dt/"
 
 # run.path The main path for the specific overall model run.
 run.path = sprintf("%s/",run.name) 
 
-#The path for model outputs.
+# The path for model outputs.
 opath = sprintf("%soutputs/",run.path)
 
-#Create the output path
+# Create the output path
 dir.create(opath,showWarnings = F, recursive = T)
 
 # A file to be created containing the model results.
-# If there is an existing file, the results will be appended to the existing file.
+# If a file already exists, the results will be appended to the existing file.
 ResultsFile = sprintf("%sResults_%s.csv",opath,run.name)
 
 ## Set up timing scenarios
 
 # Set up the levels of variables for evaluation of model timing
-species.vec = c(1,2,10,100) #1, 10, and 100 species
-change.vec = c(0,5,4,1) # No change, change every 5 timesteps, change every single timestep
-timestep.vec = c(1,6,11,21) #One timestep, 11 timesteps, 21 timesteps (increment by 10)
-vdb.vec = c(0,1) # Whether or not to generate many of the outputs in the model
-matrix.diagnostics.vec = c(0,1) #Whether or not to generate many of the matrix diagnostic outputs
-extent.vec = c(1,2, 4,20) # 1 cell, 16 cells, 400 cells
+#1,2, 10, and 100 species
+species.vec = c(1,2,10,100) 
+# No change, change every 5 timesteps, change every single timestep
+change.vec = c(0,5,4,1) 
+# One timestep, 11 timesteps, 21 timesteps (increment by 10)
+timestep.vec = c(1,6,11,21) 
+# Whether or not to generate many of the outputs in the model
+vdb.vec = c(0,1) 
+# Whether or not to generate many of the matrix diagnostic outputs
+matrix.diagnostics.vec = c(0,1) 
+# 1, 2, 4, 20 cells
+extent.vec = c(1,2, 4,20) 
 
 # Set default values for evaluation of other variables
 spv = 2
@@ -68,12 +78,14 @@ tsv = 6
 vdv = 0
 mdv = 0
 
-#Get the number of scenarios to be run
-num.scn = length(species.vec) + length(extent.vec) + length(change.vec) + length(timestep.vec) + length(vdb.vec) + length(matrix.diagnostics.vec)
+# Get the number of scenarios to be run
+num.scn = length(species.vec) + length(extent.vec) + length(change.vec) + 
+  length(timestep.vec) + length(vdb.vec) + length(matrix.diagnostics.vec)
 
 # Set up vectors of inputs to be parallel with one another
 sp.vec.pre = c()
-sp.vec.val = species.vec #Create a vector of species values, with most scenarios run for 10 sp.
+#Create a vector of species values, with most scenarios run for 10 sp.
+sp.vec.val = species.vec 
 sp.vec.post = rep(spv, (num.scn - length(sp.vec.val)))
 sp.vec = c(sp.vec.pre,sp.vec.val,sp.vec.post)
 
@@ -102,7 +114,7 @@ extent.vec.val = extent.vec
 extent.vec.post = rep(exv, (num.scn - length(extent.vec.pre) - length(extent.vec.val)))
 ex.vec = c(extent.vec.pre, extent.vec.val, extent.vec.post)
 
-#Add an intermediate and extreme scenario for all vectors
+# Add an intermediate and extreme scenario for all vectors
 sp.vec = c(sp.vec, 50, 100)
 ch.vec = c(ch.vec, 5, 1)
 ts.vec = c(ts.vec, 11, 21)
@@ -115,7 +127,8 @@ num.scn = num.scn + 2 #For the two manually added scenarios
 # Create an index of scenario numbers
 in.seq = seq(1,num.scn)
 
-#Check that vectors were correctly constructed. Note how only one vector has non-default values at once.
+# Check that vectors were correctly constructed. Note how only one vector has
+# non-default values at once.
 #sp.vec
 #ch.vec
 #ts.vec
@@ -124,7 +137,7 @@ in.seq = seq(1,num.scn)
 #ex.vec
 
 ## Set up initial.conditions and settings using Example1 as a template.
-#Set the path where your inputs are stored
+# Set the path where your inputs are stored
 input.path = sprintf("spdem_ex1/inputs/")
 ex1.ending = "_spdem_ex1"
 
@@ -138,29 +151,34 @@ settings.file = sprintf("%sSettings%s.csv",input.path,ex1.ending)
 set.ex1 = read.csv(settings.file)
 #head(set)
 
-## Set up the other input files: env.file, species.instr.file, species.resp.file
+## Set up the other input files:
+# env.file, species.instr.file, species.resp.file
 
-#Read in environmental layers file
-input.path = sprintf("spdem_timing/inputs/") #Change input path to correspond to the current folder.
+# Read in environmental layers file
+# Change input path to correspond to the current folder
+input.path = sprintf("spdem_timing/inputs/") 
 env.file = sprintf("%sEnvironmental_layers_%s.csv",input.path,run.name)
 ef = read.csv(env.file)
-#ef #This will display the values of the environmental layers file
-#?env.file #This will provide more details on the environmental layers file
+#ef # This will display the values of the environmental layers file
+#?env.file # This will provide more details on the environmental layers file
 
-#Read in species instructions file
+# Read in species instructions file
 sp.instr.file = sprintf("%sSpecies_instructions_spdem_timing.csv",input.path)
 sif = read.csv(sp.instr.file)
-#sp.instr.file  #This will display the values for the timing scenario 
-#?sp.instr.file #This will provide more details on the format and codes used in the species instructions file
+#sp.instr.file  # This will display the values for the timing scenario 
+#?sp.instr.file # This will provide more details on the format and codes used
+# in the species instructions file.
 
-#Read in species response instructions file
+# Read in species response instructions file.
 sp.resp.instr.file = sprintf("%sSpecies_response_instr_spdem_timing.csv", input.path)
 srif = read.csv(sp.resp.instr.file)
-#srif #This will display the species response file values
-#?sp.resp.instr.file #This will give more details on what the species response file values mean.
+#srif # This will display the species response file values
+# This will give more details on what the species response file values mean.
+#?sp.resp.instr.file 
 
-# Modify the base settings to match the timing scenario requirements
-ic.ex1$num.adults = 1000 #Add num.adults field and initialize with 1000 of each species
+## Modify the base settings to match the timing scenario requirements
+# Add num.adults field and initialize with 1000 of each species
+ic.ex1$num.adults = 1000 
 
 set.ex1$GenerateNewSpecies = 1
 set.ex1$GenerateNewLandscape = 1
@@ -168,23 +186,27 @@ set.ex1$loc.extraction = NULL
 set.ex1$timestep.extraction = NULL
 set.ex1$locations = NULL
 set.ex1$ignore.rtd = 1
-set.ex1$Write.Timefile = 1 #Only output the total model run time (2 would also reveal which sections of the model scale the worst)
+# Write.Timefile = 1 only outputs the total model run time
+# A value of 2 would also reveal which sections of the model scale the worst
+set.ex1$Write.Timefile = 1  
 
 ic = ic.ex1
 set = set.ex1
-#Expand the dataframes to contain the requisite number of scenarios (environmental layers does not need to be expanded)
+# Expand the dataframes to contain the requisite number of scenarios
+# (environmental layers does not need to be expanded)
 for (i in 2:num.scn){
     ic = rbind(ic,ic.ex1)
     set = rbind(set,set.ex1)
     }
 
-#Update the dataframes with the vectors
+# Update the dataframes with the vectors
 ic$Scenario = in.seq
 ic$ModelName = sprintf("Timing%s",in.seq)
 ic$Extent = ex.vec
 ic$MaxTime = ts.vec
-#set total species richness to equal landscape species richness to equal patch species richness.
-#Not ecologically realisitc, but this model is being run for timing purposes, and not ecological realisim.
+# set total species richness to equal landscape species richness and patch
+# species richness. This is not ecologically realisitc, but this model is
+# being run for timing purposes, and not ecological realism.
 ic$Tot.sp.rich = ic$Land.sp.rich = ic$Loc.sp.rich = sp.vec  
 
 set$Scenario = in.seq
@@ -192,67 +214,87 @@ set$GenerateVisualDebuggerData = vd.vec
 set$RunMatrixDiagnostics = md.vec
 set$lnd.lbl = sprintf("scn%s",in.seq)
 
-
-#Code to (optionally) delete previous versions of the ResultsFile and TimeFile.
+# When do.del == 1, delete previous versions of the ResultsFile and TimeFile.
 do.del = 1
 if (do.del == 1){
   unlink(ResultsFile) #Delete any previous ResultsFile
   }
 
-#Create a function to apply on the cluster
-do.spdem = function(x, DispPath,run.path,opath,ResultsFile,ic,set,ef,sp.instr.file,sp.resp.instr.file,ch.vec){
+# Create a function to apply on the cluster
+do.spdem = function(x, DispPath,run.path,opath,
+                    ResultsFile,ic,set,ef,
+                    sp.instr.file,sp.resp.instr.file,ch.vec){
     library(spatialdemography)
     scn = x 
 
-    # s.lbl A label used in the construction of the Species file and new landscape files.
+    # s.lbl A label used in the construction of the Species file
+    # and new landscape files.
     s.lbl = sprintf("scn%s",x)
 
-    # file.ending A text string that matches the end of the species file (either to be generated or that already exists).
+    # file.ending A text string that matches the end of the species file
+    # THe species file can either be generated or already exist.
     file.ending = sprintf("_%s_%s", run.name, s.lbl)
     
     #Update env.file to correspond to current change scenario
     ef$env.change.freq[1] = ch.vec[x]
-    # Note: most scenarios will have more than one environmental layer, so it is not possible to structure the environmental
-    # layers file in the same way as the initial.conditions file or the settings file. Hence why this data frame is updated here.
+    # Note: most scenarios will have more than one environmental layer,
+    # so it is not possible to structure the environmental layers file in the
+    # same way as the initial.conditions file or the settings file. Hence why
+    # this data frame is updated here.
 
     # Create a file name & directory for the species file
     sp.path = sprintf("%sSpecies/",run.path)
     dir.create(sp.path,showWarnings = F, recursive = T)
     spfile = sprintf("%sspecies_file%s.csv", sp.path, file.ending)
     
-    # set.seed function makes the stochastic results deterministic for repeatability purposes
+    # set.seed function makes the stochastic results deterministic for
+    # repeatability purposes
     set.seed(567891234)
 
-    #Run SpatialDemography. This is the main command to run the model, and uses the inputs defined above.
-    SpatialDemography(scn,s.lbl,file.ending,DispPath,run.path,opath,ResultsFile,ic,set,ef,spfile,sp.instr.file,sp.resp.instr.file)    
+    # Run SpatialDemography.
+    # This is the main command to run the model,
+    # and uses the inputs defined above.
+    SpatialDemography(scn,s.lbl,file.ending,DispPath,run.path,opath,
+                      ResultsFile,ic,set,ef,
+                      spfile,sp.instr.file,sp.resp.instr.file)    
     }
 
 cpu = "PC"
 #cpu = "cluster"
 
-# NOTE: the cluster version of the code was not actually run due to problems with our computing cluster. Conseqeuently, it may contain minor bugs.
+# NOTE: the cluster version of the code was not actually run due to problems
+# with our computing cluster. Conseqeuently, it may contain minor bugs.
 if (cpu == "cluster"){
     cores = 1
     workspace = "Timing_prerun.RData"
   
     library(parallel)
-    workers      <- makeCluster(getOption("cl.cores", cores))     # Start worker processes
+    # Start worker processes
+    workers      <- makeCluster(getOption("cl.cores", cores))     
     save.image("Timing_prerun.RData")
   
-    clusterEvalQ(workers, load("Timing_prerun.RData")) # Add workspace to each worker
-    clusterApplyLB(cl=workers, x= in.seq, fun=do.spdem, DispPath,run.path,opath,ResultsFile,ic,set,ef,sp.instr.file,sp.resp.instr.file,ch.vec) # This is the main call for the analysis
+    # Add workspace to each worker
+    clusterEvalQ(workers, load("Timing_prerun.RData")) 
+    
+    # This is the main call for the analysis
+    clusterApplyLB(cl=workers, x= in.seq, fun=do.spdem, DispPath,run.path,opath,
+                   ResultsFile,ic,set,ef,sp.instr.file,sp.resp.instr.file,ch.vec) 
   
-    stopCluster(cl=workers)    # Once all analyses are done the workers are closed
+    # Once all analyses are done the workers are closed
+    stopCluster(cl=workers)    
 }else{
-    #Only run once if not running it on a cluster. This will prevent the vignette from running all scenarios automatically.
-    #If not using a cluster, 1:1 can be replaced by in.seq. That will run all scenarios.
+    # Currently set to only run once. This will prevent the vignette from
+    # running all scenarios automatically.
+    # To run everything, "1:1"" can be replaced by "in.seq".
     for (i in 1:1){
-        do.spdem(i, DispPath,run.path,opath,ResultsFile,ic,set,ef,sp.instr.file,sp.resp.instr.file,ch.vec)
+        do.spdem(i, DispPath,run.path,opath,
+                 ResultsFile,ic,set,ef,sp.instr.file,sp.resp.instr.file,ch.vec)
         }
     }
   
-#Timefile 
-#This file records the timing of different steps of the model, and can be used for optimization purposes.
+# Timefile 
+# This file records the timing of different steps of the model,
+# and can be used for optimization purposes.
 TimeFile = sprintf("%sTimefile.csv",opath)
 
 timing = read.csv(TimeFile)

@@ -16,7 +16,7 @@ Edge.Type \tab The type of edge to use for the simulation.  Options are TORUS an
 MaxTime \tab The number of time steps to include in the model. \cr
 K_g \tab The adult biomass carrying capacity, in grams.  To get K in terms of abun-dance, divide K_g by the biomass of each species. \cr
 multi.species.K \tab An variable indicating carrying capacity type.  When set to 0 the carrying capacity is calculated for each species separately, when set to 1, the carry-ing capacity is applied to the biomass of ALL species combined. \cr
-competitiontype \tab A variable indicating competition type.  When 0, stage 0 individuals do not compete for microsites.  When 1, stage 0 individuals compete with other individuals of the same species for microsites, when 2, stage 0 individuals compete with all other stage 0 individuals for microsites. \cr
+competitiontype \tab A variable indicating competition type.  When 0, stage 0 individuals do not compete for microsites.  When 1, stage 0 individuals compete with other individuals of the same species for microsites, when 2, stage 0 individuals compete deterministically with all other stage 0 individuals for microsites. When 3, species compete with all other species stochastically (lottery model). \cr
 microsites \tab Total number of microsites that can be occupied. \cr
 invasion \tab An indicator for whether or not invasion should take place.  No invasion takes place when 0, otherwise, the variable sets the invasion frequency in number of timesteps (e.g., 1 would have invasion at every time, 2 would have invasion at every 2nd timestep). \cr
 num.invaders \tab The number of invaders to be added to a cell. \cr

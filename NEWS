@@ -8,9 +8,11 @@ KNOWN BUGS:
 An error where Matrix package is not being loaded (perhaps it is exported in the namespace but not in the Description? Does this matter? Note that description and namespace currently do not match regarding packages
 No option to change rounding in calculation of UTC response trait diversity
 
-#Changes in 0.10.2.9999
+#Changes in 0.10.3
 Added stochastic lottery model as a competitiontype option
 Began using Git for version control and collaborative development with Sten.
+Added Require statments to beginning of SpatialDemography to check for required packages
+Cleaned up formatting and fixed typos in Vignettes.
 
 #Changes in 0.10.2
 Removed Flags from code and dealt with flagged issues where appropriate
