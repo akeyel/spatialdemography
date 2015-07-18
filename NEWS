@@ -1,0 +1,157 @@
+#Changes to be (possibly) implemented in a future version
+Need to fix application of rtd.c (idea is to classify some of the response traits in a user-defined manner.  Currently broken.
+Discrete individual version?
+Troubleshoot and improve quantile regression options
+Add checks to trait calculation to ensure that vital rates are within the allowable range.
+
+KNOWN BUGS:
+An error where Matrix package is not being loaded (perhaps it is exported in the namespace but not in the Description? Does this matter? Note that description and namespace currently do not match regarding packages
+No option to change rounding in calculation of UTC response trait diversity
+
+#Changes in 0.10.3
+Added stochastic lottery model as a competitiontype option
+Began using Git for version control and collaborative development with Sten.
+Added Require statments to beginning of SpatialDemography to check for required packages
+Cleaned up formatting and fixed typos in Vignettes.
+
+#Changes in 0.10.2
+Removed Flags from code and dealt with flagged issues where appropriate
+Flags were left that pertained to optimization
+Updated timing file vignette to correspond to file run on cluster for the manuscript
+Updated documentation for env.type for landscape setup
+Added additional options to environmental change (all options used as distribution functions. But not yet available for conditional assignment.)
+Removed (outdated) index of functions at beginning of sdhelper.r - the man files create a more up-to-date index
+Patched assign.spp.v2 to work better with the special case of one unique species needs to be assigned to each cell.
+Added aliases for sp.file documentation
+
+#Changes in 0.10.1
+Fixed a bug where the vignettes were not building properly.
+
+#Changes in 0.10.0
+Changed package name to spatialdemography to avoid name overlap with metacom package.
+Updated test files to accomodate changed results file format
+Added a vignette to illustrate the use of the package
+Changed package to accept R objects as an inputs for initial.conditions.file, settings.file, env.file, and spfile. Also sp.instr.file and sp.resp.instr.file.
+The directory for the environmental layers and the species locations file must now be entered as inputs and are no longer input through the settings file.
+Landscape (Environmental layers) and species locations may also be input as R objects
+The old locations file format is no longer supported by spatialdemography.
+Model timing options and outputs changed
+Fixed the bug "A landscape layer that changes may read in appropriately, but may not write to the same location, resulting in multiple files, one of which lacks header info (e.g., see Example 6 from the MS)"
+   The landscape layer will write to a new file (still no header, sorry!) to avoid corrupting the original file.
+Corrected minor bugs during testing
+
+#Changes in 0.9.0
+Changed format of results file
+Added a warning message to let user know that dispersal tables are being generated and that this is a time consuming process.
+Changed species initialization part of code - moved location in code, changed options and inputs, and added new options.
+Made changes to make the package CRAN-compatible
+
+#Changes in 0.8.5
+Added a function for converting a raster file to an environmental layer input
+Added a function to help generate the cell information for the Environmental Layers file
+
+#Changes in 0.8.4
+Added option to enter "no.lbl" for landscape generation to have an existing landscape with no additional label part.
+Minor code cleanup
+Functions from stottmatrix.r were moved to mchelper.r with permission from Iain Stott. These will be replaced by the functions in popdemo, once popdemo accepts sparseMatrix formats
+stottmatrix.r is no longer required.
+
+#Changes in 0.8.3
+Alpha code for quantile regression & boosted regression trees for analyzing outputs (for Stochastic plants paper)
+Fixed way model outputs were written to avoid code slowup bug introduced in version 0.8.0.
+Fixed timing bug so that setup.matrices could be timed.
+Added timing to compute.diagnostics - this step appears to be running extremely slowly for large landscapes.
+Minor change to simulation2.r - removed some extraneous code where empty lists were created and then appended to - just wrote directly to create a new list.
+
+#Changes in 0.8.2
+Added na.omit to a step checking proportion of dispersing seeds - cells not producing seeds were causing an error in this calculation
+
+#Changes in 0.8.1
+Fixed bug in environmental layer generation by cover - code wanted semi-colon delimited values instead of the single starting number required by another part of the code
+Corrected typo in setup.env.info. May have re-corrected this typo back to what it was originally - typo was in the input files.
+Corrected bug in environmental change portion of simulation2.r
+Patched species generation for existing files to have special handling for "blank"
+Added from.file option for constrained landscape variable generation to ease reuse of environmental layers template.
+Changed locations file to be in inputs folder instead of locations folder (possibly implemented in an earlier version, i.e. 0.8.0).
+
+#Changes in 0.8.0
+Add check to ensure that clone biomass is less than juvenile biomass (to avoid thinning oddities)
+Changed number of output files to be fewer (but still contain the same information)
+Fixed bug where incorrect landscape files are being output (problem was with the copula option)
+Moved environmental change implementation to end of model
+Changed change.count to start with 1
+Modified write.env.lyr and read.landscape.lyr functions & modified input files to match
+Added function for setting up stochastic plants scenario (in mchelper.r) & documentation for stochastic plants inputs (in metacomse.r)
+Added juvenile and seed biomass as optional entries in species file & changed biomass to biomass.adult to be clear what is being referred to (NOT BACKWARDS COMPATIBLE - old species files will need the headers changed.
+
+#Changes in 0.7.2
+Added option to read in landscape changes from file
+Added function for creating species that include the thinning law & trait trade-offs used by Jakob in the stochastic plants paper.
+Added function option to pull the environmental modifier directly from the environmental layer (this function will bypass the check that constrains the modifier between 0 - 1)
+Added functions to do special modifier behavior consistent with Jakob's stochastic plants approach
+Corrected a bug in setup.env.info where cover.levels was required even though env.type was not "cover"
+Corrected a bug in get.base.env.lyr where an input was missing!
+Minor change to get.mod - moved the as.num command to inside (as this command crashes the new function options I created)
+Corrected a bug in Dispersal_Probabilities.csv THIS WILL REQUIRE RENAMING DISPERSAL TABLES to remove an underscore after funct!
+
+#Changes in 0.7.1
+Corrected a bug in where landscape files were being written to
+Corrected a bug that prevents the writing of the is.error column in the species file
+Corrected the bug that the script crashes if a Species folder is not already existing
+Added an error message if the input landscape does not match the input extent (oops).
+
+#Changes in 0.7.0
+Moved invasion to correct a competition loophole (and changed invasion to occur at the mobile seed stage instead of the seed stage).
+Changed ::: to a ; as a delimiter.
+Reduced redundancy in applying functions and changed coding for functions (e.g., for dispersal, for modifiers, etc)
+Switched to roxygen2 package for maintaining man pages & namespace
+Updated man pages
+Renamed Environmental_variables as Environmental_layers (throughout code, man pages and input files)
+Dropped WriteResults option from settings file (not used)
+Re-ordered inputs to MetaComSE, so that optional files could be optional inputs.
+Corrected bug in Results file - results from later scenarios were overwriting previous Results.
+Renamed some variables to provide more intuitive names (metacomse.r, mchelper.r).  E.g., env.vars renamed resp.traits
+Re-organized input & output locations (many changes external to MetaComSE)
+WARNING: Some function inputs removed, others re-ordered!
+Changed edge.type to be an input rather than a default (metacomse.r)
+Deleted check that made a snide comment if you chose cliff edge (simulation2.r)
+Changed edge type CLIFF to be ABSORBING (changed default for setup.matrices to be TORUS) (mchelper.r)
+Fixed dispersal table name to use normal notation instead of sci notation in dispersal table generation (mchelper.r; is this really an improvement?)
+Deleted MakePlots option - not used (input files, not an actual revision to the code)
+Commented out EigenMaps and DispersalMaps options - not actually supported by model (can be reincorporated when these are programmed). (metacomse.r, simulation2.r
+rtd.c temporarily hardwired to be 0 (& removed from settings file)
+
+#Changes in 0.6.0
+MAJOR CHANGE: mean dispersal distance now must be in terms of CELLS, not meters. (not backwards compatible)
+Removed cell.size from the model
+Modified to allow species locations to be input from file
+Patched make.disp.prob.v2 default to 100,000 records for the simulation
+Modified MetaComSE to take number of simulations for the dispersal tables as an input setting (not backwards compatible)
+Modified spp.gen function to no longer produce the is.error column & setup.rtd to account for its absence. (not backwards compatible)
+Fixed calculation of RTD in the case of more complicated response traits.
+Fixed calculation of RTD to not use the env.vars variable.
+
+#Changes in 0.5.1
+Fixed a bug in compute.diagnostics - I had imported and exported seeds reversed.
+Fixed a bug in assign.loop - did not have p as an input!  Was getting it from a global variable that was no longer global.
+
+#Changes in 0.5.0:
+Added some matrix diagnostic measures (backwards compatible change)
+
+#Changes in version 0.4.1:
+Adding back in man pages
+Removing junk comments/old functions from code
+
+#Changes in version 0.4.0:
+Integrated floating code at beginning of metacomese.r file
+Now no variables are assigned when you load the package
+
+#Changes in version 0.3.4
+Commented out the out-of-date functions in preparation for removal
+
+#Changes in version 0.3.3
+Converted to package format in version 0.3.3
+
+#Major model revisions were initiated on 2 July 2013 by Sasha Keyel
+
+#MetaComSE began out of the model finalized on 20 December 2010 by Jakob Gerstenlauer

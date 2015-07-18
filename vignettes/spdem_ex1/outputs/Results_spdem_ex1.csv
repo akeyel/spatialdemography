@@ -1,0 +1,4 @@
+Scenario,Scenario.Number,Scale,Timepoint,LastTime,Sp.Rich,Beta.Div,Biomass,FTD.UTC,RTD.UTC
+"Example1",1,"landscape","Initial",12,3,1.71428571428571,305000,3,3
+"Example1",1,"landscape","Final",12,3,1.2,279315.088429893,3,3
+"Example1",1,"landscape","Change",12,0,-0.514285714285714,-25684.911570107,0,0

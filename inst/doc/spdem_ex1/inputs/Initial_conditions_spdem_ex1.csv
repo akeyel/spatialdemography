@@ -1,0 +1,2 @@
+Scenario,ModelName,Extent,Edge.Type,MaxTime,K_g,multi.species.K,competitiontype,microsites,invasion,num.invaders,cells.to.invade,invader.repro.proportion,num.adults,Tot.sp.rich,Land.sp.rich,Loc.sp.rich,Tot.rtd,Land.rtd,Loc.rtd
+1,Example1,2,TORUS,12,100000,1,2,2000000,0,NA,NA,NA,100,3,NA,NA,NA,NA,NA

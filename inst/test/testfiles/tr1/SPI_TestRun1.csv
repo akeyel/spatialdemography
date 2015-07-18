@@ -1,0 +1,14 @@
+VitalRate,Function,parameter1,parameter2
+p01,3,0.1,NA
+p02,3,0,NA
+p11,3,0,NA
+p12,3,0.1,NA
+p22,3,0,NA
+p23,3,0.1,NA
+p30,3,1250,NA
+p32,3,0,NA
+p33,3,0,NA
+biomass.adult,3,10,NA
+dispersalfunction,3,1,NA
+disppar1,3,0.14,NA
+disppar2,3,1,NA

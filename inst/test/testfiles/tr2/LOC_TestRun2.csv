@@ -1,0 +1,3 @@
+LifeStage,Species,TimeStep,Cell1,Cell2,Cell3,Cell4,Cell5,Cell6,Cell7,Cell8,Cell9,Cell10,Cell11,Cell12,Cell13,Cell14,Cell15,Cell16
+Adults,1,1,100,0,100,100,100,100,0,0,0,0,100,100,0,100,0,100
+Adults,2,1,0,100,100,100,0,0,100,100,100,100,100,100,100,0,100,0
