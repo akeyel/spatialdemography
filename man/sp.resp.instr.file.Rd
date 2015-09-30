@@ -10,13 +10,39 @@ Species File \link[spatialdemography]{sp.file} are required.
 }
 \details{
 \tabular{lll}{
-Label \tab L.p23 \tab This field consists of two parts, separated by a period.  The first part is the landscape.identifier for the landscape layer of interest, the second part is the vital rate that should be modified.  Duplicate labels are allowed that code for dif-ferent response traits. \cr
-DistributionFunction \tab 10 \tab A numeric indicator that codes for a function for how the response trait should be distributed among species. See \link[spatialdemography]{distribution.functions} for more details. \cr
-distfunpar1 \tab 0.5 \tab The first parameter for the distribution function. See \link[spatialdemography]{distribution.functions} for more details. \cr
-distfunpar2 \tab 2.5 \tab The second parameter for the distribution function. See \link[spatialdemography]{distribution.functions} for more details. \cr
-ResponseFunction \tab 100 \tab A numeric indicator that codes for how the response trait will function for each species. See \link[spatialdemography]{response.functions} for more details. \cr
-respfunpar1 \tab 1 \tab The first parameter for the response function. See \link[spatialdemography]{response.functions} for more details.\cr
-respfunpar2 \tab 0.64 \tab The second parameter for the response function. See \link[spatialdemography]{response.functions} for more details.\cr
+Label                \tab L.p23  \tab This field consists of two parts,
+                                      separated by a period. The first part is
+                                      the landscape.identifier for the
+                                      landscape layer of interest, the second
+                                      part is the vital rate that should be
+                                      modified.  Duplicate labels are allowed
+                                      that code for dif-ferent response traits. \cr
+DistributionFunction \tab 10     \tab A numeric indicator that codes for a
+                                      function for how the response trait
+                                      should be distributed among species.
+                                      See \link[spatialdemography]{distribution.functions}
+                                      for more details. \cr
+distfunpar1          \tab 0.5    \tab The first parameter for the distribution
+                                      function. See
+                                      \link[spatialdemography]{distribution.functions}
+                                      for more details. \cr
+distfunpar2          \tab 2.5    \tab The second parameter for the
+                                      distribution function.
+                                      See \link[spatialdemography]{distribution.functions}
+                                      for more details. \cr
+ResponseFunction     \tab 100    \tab A numeric indicator that codes for how
+                                      the response trait will function for
+                                      each species. See
+                                      \link[spatialdemography]{response.functions}
+                                      for more details. \cr
+respfunpar1          \tab 1      \tab The first parameter for the response
+                                      function. See
+                                      \link[spatialdemography]{response.functions}
+                                      for more details.\cr
+respfunpar2          \tab 0.64   \tab The second parameter for the response
+                                      function. See
+                                      \link[spatialdemography]{response.functions}
+                                      for more details.\cr
 }
 }
 

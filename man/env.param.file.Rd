@@ -3,22 +3,27 @@
 \alias{env.param.file}
 \title{Environmental Parameters File}
 \description{
-The file contains parameter entries and minimum and maximum values for each parameter.
-The minimum and maximum values are used for latin hypercube sampling.  If a
-constant value is desired, minimum value should equal maximum value
+The file contains parameter entries and minimum and maximum values for each
+parameter. The minimum and maximum values are used for latin hypercube sampling.
+If a constant value is desired, minimum value should equal maximum value
 while min and max give minimum and maximum values to sample from.
 See details for a description of parameters to include.
 }
 \details{
 \itemize{
-\item k2 A parameter used in the Weibull function describing the relationship between adult longevity and allocation to reproduction
-%% Jakob often referred to this as the "Cost of Iteroparity".
+\item k2 A parameter used in the Weibull function describing the relationship
+      between adult longevity and allocation to reproduction
+      %% Jakob often referred to this as the 'Cost of Iteroparity'.
 \item seed.mortality Seed mortality
-\item Ss.mean Mean stochastic seedling survival (fixed across all species).  Stochastic seedling survival is determined by a beta distribution (but this is not the Alpha parameter!)
+\item Ss.mean Mean stochastic seedling survival (fixed across all species).
+      Stochastic seedling survival is determined by a beta distribution
+      (but this is not the Alpha parameter!)
 \item Ss.var Variation in stochastic seedling survival (fixed across all species)
-\item fertility.mean Mean fertility rate (fixed across all species).  Fertility is determined by a log-normal distribution
+\item fertility.mean Mean fertility rate (fixed across all species).
+      Fertility is determined by a log-normal distribution
 \item fertility.var Variation (sd) in fertility rate (fixed across all species)
-\item Ss.fert.cor The correlation between variation in fertility and stochastic seedling survival.
+\item Ss.fert.cor The correlation between variation in fertility and
+      stochastic seedling survival.
 }
 }
 

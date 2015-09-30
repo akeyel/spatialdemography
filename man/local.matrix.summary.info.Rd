@@ -3,13 +3,13 @@
 \alias{local.matrix.summary.info}
 \title{Local Matrix Summary Info}
 \description{
-Found in Diagnostics/Sp*/ folder, where * corresponds to the species of interest.
-For each cell, this file gives the Dominant eigenvalue from the local transition matrix,
-The per capita seeds the cell exports, and the per capita seeds the cell imports.
-Per capita imports is misleading, as different cells that contribute to this cell
-may have different population sizes, and this is a sum across all cells.
-Finally, the proportion of the seeds produced that are exported is given.
-There is a local matrix summary info for each species, and for each environmental
-change.
+Found in Diagnostics/Sp*/ folder, where * corresponds to the species of
+interest. For each cell, this file gives the Dominant eigenvalue from the
+local transition matrix, the per capita seeds the cell exports, and the per
+capita seeds the cell imports. Per capita imports is misleading, as different
+cells that contribute to this cell may have different population sizes, and
+this is a sum across all cells. Finally, the proportion of the seeds produced
+that are exported is given. There is a local matrix summary info for each
+species, and for each environmental change.
 }
 

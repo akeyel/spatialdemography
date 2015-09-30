@@ -8,6 +8,9 @@ KNOWN BUGS:
 An error where Matrix package is not being loaded (perhaps it is exported in the namespace but not in the Description? Does this matter? Note that description and namespace currently do not match regarding packages
 No option to change rounding in calculation of UTC response trait diversity
 
+#Changes in 0.10.4
+Added the ability to process a threshold response to environmental variables (response function = 106)
+
 #Changes in 0.10.3
 Added stochastic lottery model as a competitiontype option
 Began using Git for version control and collaborative development with Sten.

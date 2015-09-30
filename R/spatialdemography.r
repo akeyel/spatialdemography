@@ -1005,9 +1005,9 @@ NULL
 #'        normal distribution with the new mean and a specified standard deviation.  
 #'        In this case, env.change.mag needs to contain: 
 #'  \itemize{ %% Begin sixth sublist
-#'    \item 1.\tthe probability the cell will change
-#'    \item 2.\tthe change in mean for the new value
-#'    \item 3.\tthe overall standard deviation for drawing a new value
+#'    \item 1. the probability the cell will change
+#'    \item 2. the change in mean for the new value
+#'    \item 3. the overall standard deviation for drawing a new value
 #'    \item 4. Example: 0.5;0.25;1
 #'    \item 5. The first number gives the probability a cell value will change.  
 #'          R will draw a random number, if the random number is less than or 
@@ -1017,16 +1017,16 @@ NULL
 #'          the cell would then be drawn from a normal distribution with a mean 
 #'          of 20.25 and a standard deviation of 1.
 #'  } %% end sixth sublist (rnorm prob options)
-#'  \item f.\tlandscape.wide.change: A change is applied to the entire landscape, 
+#'  \item f. landscape.wide.change: A change is applied to the entire landscape, 
 #'        but the difference in values between cells remains the same.  
 #'        In this case, env.change.mag contains four elements:
 #'  \itemize{ %% begin 7th list, landscape.wide.change options
-#'    \item i.\tthe overall mean for the landscape.  This will be changed each 
+#'    \item i. the overall mean for the landscape.  This will be changed each 
 #'          time there is an environmental change in this layer
-#'    \item ii.\tthe overall standard deviation for the landscape.  
+#'    \item ii. the overall standard deviation for the landscape.  
 #'          This will change each time there is an environmental change.
-#'    \item iii.\tThe change in overall mean.
-#'    \item iv.\tThe change in overall standard deviation.
+#'    \item iii.The change in overall mean.
+#'    \item iv.The change in overall standard deviation.
 #'    \item Explanation: First, the overall mean and standard deviation in 
 #'          env.change.mag are updated based on elements iii. and iv.  
 #'          Second, a change is drawn from a normal distribution the overall 
@@ -1059,11 +1059,11 @@ NULL
 #'        more or fewer suitable habitat patches than there are values to assign).  
 #'        It only works if the conditional layer does not change, or changes via swap.  
 #'        env.change.mag should be set to 0 or to NA for this setting. 
-#'  \item markov: b.\tmarkov: See above under non-conditional landscape elements.  
+#'  \item markov: b.markov: See above under non-conditional landscape elements.  
 #'        The markov transitions are only applied to cells that are suitable 
 #'        based on the other habitat type, non-suitable cells are automatically 
 #'        zero.
-#'  \item markov.changing.transitions: c.\tmarkov.changing.transition: See above 
+#'  \item markov.changing.transitions: c.markov.changing.transition: See above 
 #'        under non-conditional landscape elements. The markov transitions are 
 #'        only applied to cells that are suitable based on the other habitat type, 
 #'        non-suitable cells are automatically zero.
@@ -1149,6 +1149,11 @@ NULL
 #' 105  \tab clone fertility        \tab Get clone number based on the approach 
 #'                                       in the Stochastic Plants paper.  
 #'                                       See details in function 104. \cr
+#' 106  \tab threshold              \tab Apply lower and upper thresholds.
+#'                                       Format is "NA;106;LT;UT" If environmental value is
+#'                                       lower than the lower threshold (LT) or higher than the
+#'                                       upper threshold (UT), the vital rate is set to 0. Otherwise
+#'                                       it is unaffected. No optimal value is needed.
 #' }
 #' @name DFRF
 #' @aliases distribution.functions response.functions

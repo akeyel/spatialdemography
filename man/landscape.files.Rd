@@ -15,7 +15,8 @@ headers.
 }
 \details{
 During the model run, if there is environmental change, new landscapes can be
-generated.  These will have a number appended after the file name, and the numbers
-will be linked to correpsonding timesteps in the \link[spatialdemography]{change.lookup}.
+generated.  These will have a number appended after the file name, and the
+numbers will be linked to correpsonding timesteps in the
+\link[spatialdemography]{change.lookup}.
 }
 

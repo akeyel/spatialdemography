@@ -10,7 +10,8 @@ See details for description of traits that should be included.
 }
 \details{
 \itemize{
-\item seed.disp.ratio The proportion of seeds dispersing out of the cell. %% This parameter is misnamed, should be proportion dispersing.
+\item seed.disp.ratio The proportion of seeds dispersing out of the cell.
+      %% This parameter is misnamed, should be proportion dispersing.
 \item adult.longevity Adult survival %% This parameter is also misnamed.
 \item g Proportion of reproduction allocated to clonal reproduction
 \item w Probability of a seed germinating

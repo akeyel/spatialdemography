@@ -7,10 +7,11 @@
 The results file contains a row for each scenario, with the scenario, scenario
 number, and the last timestep completed (in case the model crashes). \cr
 The model provides initial, final, and change for species richness Sp.Rich,
-(multiplicative) beta diversity (Beta.Div), biomass.adult, functional trait diversity
-(FTD.UTC, calculated with the unscaled multivariate richness index), and response trait
-diversity (also calculated with the unscaled multivariate richness index.
-(at present these are fixed to these specific options and are calculated at
-the landscape scale. In future versions these may be user-specified. \cr
+(multiplicative) beta diversity (Beta.Div), biomass.adult, functional trait
+diversity (FTD.UTC, calculated with the unscaled multivariate richness index),
+and response trait diversity (also calculated with the unscaled multivariate
+richness index. (at present these are fixed to these specific options and are
+calculated at the landscape scale. In future versions these may be
+user-specified. \cr
 }
 

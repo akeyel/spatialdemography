@@ -3,7 +3,7 @@
 \alias{change.lookup}
 \title{Change Lookup}
 \description{
-One lookup file is created, which tells spatialdemography which landscape files
-correspond to which timesteps.
+One lookup file is created, which tells spatialdemography which landscape
+files correspond to which timesteps.
 }
 

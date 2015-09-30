@@ -10,7 +10,8 @@ by requesting visual debugger data or matrix diagnostics.
 Table summarizes how many files are produced
 per model run (MR), scenario (SC), timestep (TS), cell (CL), species (SP),
 environmental layer (EL), environmental conditions (EC). \cr
-The file  production is multiplicative (e.g., 100 timesteps x 2 species = 200 files)
+The file  production is multiplicative
+(e.g., 100 timesteps x 2 species = 200 files)
 \tabular{lll}{
 File type \tab Number of Files created \tab Link to File description \cr
 Seeds in landscape \tab MR, SC, TS, SP \tab \link[spatialdemography]{stage.abundances} \cr

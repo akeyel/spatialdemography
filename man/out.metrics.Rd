@@ -6,19 +6,21 @@
 These are metrics that can be calculated by spatialdemogrphay as the primary
 model results.
 %% These options are not yet available:
-%% "FTD.PGFD" \tab Functional trait diversity calculated with Petchey & Gaston's FD \cr
-%% "RTD.PGFD" \tab Response trait diversity calculated with Petchey & Gaston's FD\cr
+%% 'FTD.PGFD' \tab Functional trait diversity calculated with Petchey & Gaston's FD \cr
+%% 'RTD.PGFD' \tab Response trait diversity calculated with Petchey & Gaston's FD \cr
 }
 \details{
 Options are given in the below table:
 \tabular{ll}{
-"Sp.Rich" \tab Species Richness \cr
-"Beta.Div" \tab Multiplicative Beta Diversity \cr
-"Biomass" \tab Total Biomass \cr
-"FTD.UTC" \tab Functional trait richness calculated with Unique Trait Combinations \cr
-"RTD.UTC" \tab Response trait richness calculated with Unique Trait Combinations \cr
-"FTD.FRIC" \tab Functional trait richness calculated with the convex hull\cr
-"RTD.FRIC" \tab Response trait richness calculated with the convex hull\cr
+'Sp.Rich'  \tab Species Richness \cr
+'Beta.Div' \tab Multiplicative Beta Diversity \cr
+'Biomass'  \tab Total Biomass \cr
+'FTD.UTC'  \tab Functional trait richness calculated with Unique Trait
+                Combinations \cr
+'RTD.UTC'  \tab Response trait richness calculated with Unique Trait
+                Combinations \cr
+'FTD.FRIC' \tab Functional trait richness calculated with the convex hull\cr
+'RTD.FRIC' \tab Response trait richness calculated with the convex hull\cr
 }
 }
 

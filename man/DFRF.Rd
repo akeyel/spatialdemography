@@ -13,31 +13,75 @@ through creation of a modifier (constrained to be between 0 and 1)
 \details{
 Distribution functions are given in the following table:
 \tabular{lll}{
-Function Code \tab Function \tab Description \cr
-1 \tab log-normal \tab Draw values from a log-normal distribution; par1 specifies the mean and par2 specifies the SD (mean & SD in log-space, but see note below) \cr
-2 \tab normal \tab Draw values from a normal distribution; par1 specifies the mean and par2 specifies the SD \cr
-3 \tab constant \tab Only enter a constant value.  Only par1 is used. \cr
-4 \tab uniform \tab Draw values from a uniform distribution.  The lower bound is given by par1 and the upper by par2 \cr
-5 \tab uniform, rounded to nearest integer \tab Draw values from a uniform distribution, but round to the nearest integer.  The lower bound is given by par1 and the upper by par2.  Both bounds must be integers. \cr
-"cover" \tab cover \tab Values are assigned relative to proporition of cover, with par1 specifying cover proportions. Only can be used for environmental layer setup. \cr
+Function Code  \tab Function   \tab Description \cr
+1              \tab log-normal \tab Draw values from a log-normal
+                                    distribution; par1 specifies the mean and
+                                    par2 specifies the SD (mean & SD in
+                                    log-space, but see note below) \cr
+2              \tab normal     \tab Draw values from a normal distribution;
+                                    par1 specifies the mean and par2
+                                    specifies the SD \cr
+3              \tab constant   \tab Only enter a constant value. Only par1 is
+                                    used. \cr
+4              \tab uniform    \tab Draw values from a uniform distribution.
+                                    The lower bound is given by par1 and the
+                                    upper by par2 \cr
+5              \tab uniform, rounded to nearest integer \tab Draw values from
+                                    a uniform distribution, but round to the
+                                    nearest integer. The lower bound is given
+                                    by par1 and the upper by par2. Both
+                                    bounds must be integers. \cr
+'cover'        \tab cover      \tab Values are assigned relative to
+                                    proporition of cover, with par1
+                                    specifying cover proportions. Only can be
+                                    used for environmental layer setup. \cr
 }
 Response functions are given here:
 \tabular{lll}{
 Function Code \tab Function \tab Description \cr
-101 \tab matching \tab if the value of an environmental layer in a given cell matches the species' target value, then the appropriate vital rate is multiplied by param1.  If the value does not match, then the appropriate vital rate is multiplied by param2. \cr
-102 \tab quadratic, decreasing \tab -par1 * (env.val - target.val)^2 + 1 Where env.val is the value of the environmental layer in a given cell, and target.val is the species' target value. \cr
-103 \tab environmental \tab Take modifier value directly from cell's environmental layer
-Note that these modifiers are not constrained to be between 0 and 1, and choosing
-biologically plausible/realistic/possible values is left to the investigator \cr
-104 \tab seed fertility \tab Get seed number based on the approach in the Stochastic Plants paper
-opt.val = value specified as base vr for clone production (allows calculation of the modifier)
-par1 = biomass.adult:biomass.seed:biomass.clone
-par2 = relative.allocation.reproduction (a):ratio.sex.allocation (g)
-q = biomass.adult * a * fertility   #fertility is given by the environmental layer and is in grams
-num.seeds = q * (1 - g) / biomass.seeds (For funct == 105, num.clones = q * g / biomass.clones)
-modifier = num.seeds / opt.val #This will later be multiplied by opt.val, allowing that part to cancel out leaving the new seed number.
-\cr
-105 \tab clone fertility \tab Get clone number based on the approach in the Stochastic Plants paper.  See details in function 104.  \cr
+101  \tab matching               \tab if the value of an environmental layer
+                                      in a given cell matches the species'
+                                      target value, then the appropriate
+                                      vital rate is multiplied by param1.
+                                      If the value does not match, then the
+                                      appropriate vital rate is multiplied by
+                                      param2. \cr
+102  \tab quadratic, decreasing  \tab -par1 * (env.val - target.val)^2 + 1
+                                      Where env.val is the value of the
+                                      environmental layer in a given cell,
+                                      and target.val is the species' target
+                                      value. \cr
+103  \tab environmental          \tab Take modifier value directly from
+                                      cell's environmental layer
+                                      Note that these modifiers are not
+                                      constrained to be between 0 and 1, and
+                                      choosing biologically
+                                      plausible/realistic/possible values is
+                                      left to the investigator \cr
+104  \tab seed fertility         \tab Get seed number based on the approach
+                                      in the Stochastic Plants paper
+                                      opt.val = value specified as base vr
+                                      for clone production (allows
+                                      calculation of the modifier)
+                                      par1 = biomass.adult:biomass.seed:biomass.clone
+                                      par2 = relative.allocation.reproduction (a):ratio.sex.allocation (g) TODO (sten): this is hard to understand intuitively
+                                      q = biomass.adult * a * fertility
+                                      #fertility is given by the environmental
+                                      layer and is in grams
+                                      num.seeds = q * (1 - g) / biomass.seeds
+                                      (For funct == 105, num.clones = q * g / biomass.clones)
+                                      modifier = num.seeds / opt.val
+                                      #This will later be multiplied by
+                                      opt.val, allowing that part to cancel
+                                      out leaving the new seed number. \cr
+105  \tab clone fertility        \tab Get clone number based on the approach
+                                      in the Stochastic Plants paper.
+                                      See details in function 104. \cr
+106  \tab threshold              \tab Apply lower and upper thresholds.
+                                      Format is "NA;106;LT;UT" If environmental value is
+                                      lower than the lower threshold (LT) or higher than the
+                                      upper threshold (UT), the vital rate is set to 0. Otherwise
+                                      it is unaffected. No optimal value is needed.
 }
 }
 

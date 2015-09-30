@@ -4,64 +4,137 @@
 \alias{env.change.type}
 \title{env.change.type & env.change.mag inputs}
 \description{
-env.change type specifies how the environment changes, while env.change.mag determines the magnitude of the change.
-The field env.change.mag often contains multiple pieces of information.  Main components are separated by a semi-colon, sub-components are separated by a colon.
+env.change type specifies how the environment changes, while env.change.mag
+determines the magnitude of the change. The field env.change.mag often
+contains multiple pieces of information. Main components are separated by a
+semi-colon, sub-components are separated by a colon.
 }
 \details{
 \itemize{ %% Begin first list
-\item For Non-conditional Landscape Elements (i.e. environmental layers where cond.var is set to NA) \cr
+\item For Non-conditional Landscape Elements (i.e. environmental layers where
+      cond.var is set to NA) \cr
 \itemize{ %% Begin sub-list for non-conditional landscape elements
-\item swap: this will randomize the locations of existing values in the landscape element.  env.change.mag should be 0 or NA for this env.change.type.
-\item markov: this will change each value according to a Markov process, based on traisition probabilities given in env.change.mag
-\itemize{ %% Begin third sub-list (for markov option)
-\item env.change.mag needs to have transition probabilities for each possible value in the environmental layer
-\item The possible values are given first, followed by transitions for first layer value (to first, to second, etc), then transitions for the second layer value (to first, to second, etc)
-\item Transitions should be cumulative probabilities
-\item For example: 0:1;0.681:1:0.275:1
-\itemize{ %% Begin forth sub-list: example options
-\item 0:1 correspond to two possible values in the landscape, 0 and 1.
-\item 0.681 corresponds to the probability of going from 0 to 0.  The 1 indicates the cumulative transition probability (and will always be 1 for the last value).  The probability of transitioning from 0 to 1 is 0.319 in this example (1 - 0.681, the preceding value.  The probability of transitioning from 1 to 0 is 0.275, and the probability of transitioning from 1 to 1 is 0.725 (1 - 0.275).
-} %% End forth sublist
-} %% For markov option (third sublist)
-\item markov.changing.transitions: The same as markov above, except with an extra part of env.change.mag describing how the transition rates themselves change with time.
-\itemize{ %% Begin fifth sublist
-\item For example 0:1;0.681:1:0.275:1;-0.05:0:-0.025:0
-\item The last section -0.05:0:-0.025:0 corresponds to:
-\item -0.05 this decreases the probability of transitioning from 0 to 0.
-\item 0 This leaves the end point at 1.  With the decrease in transition probability for 0 to 0, this results in an increase in transition probability of 0 to 1.
-\item -0.025 leads to a decrease in the transition probability of going from 1 to 0
-\item 0 Keeps the cumulative probability distribution at 1, and consequently will lead to increasing transition probabilities from 1 to 1.
-} %% end fifth sublist (markov.changing.transitions descriptions)
-\item cover.change.and.swap: (needs testing) this changes the initial cover levels, then reassigns cover values to the landscape randomly based on the new cover levels.  In this case, env.change.mag corresponds to the incremental changes to overall cover levels.  These changes must balance one another.  For example, if initial cover levels were 0.5,0.25,0.25, and the value of env.change.mag was 0.25;-0.125;-0.125, at each change step, the overall cover level after the first change would be 0.75,0.125,0.125.  Note that changes that result in cover levels that cannot be assigned to the landscape (e.g., in a landscape of 4 cells, you could not have probabilities other than 0,.25,.5,.75, and 1). Also note that a change that would reduce a cover level below 0 or above 1 will result in a warning and no environmental change.
-\item rnorm.prob: (needs testing) each value of a landscape element will change with a specified probability.  If it changes, the mean will be adjusted by a set value, and a new value will be drawn from a random normal distribution with the new mean and a specified standard deviation.  In this case, env.change.mag needs to contain:
-\itemize{ %% Begin sixth sublist
-\item 1.	the probability the cell will change
-\item 2.	the change in mean for the new value
-\item 3.	the overall standard deviation for drawing a new value
-\item 4. Example: 0.5;0.25;1
-\item 5. The first number gives the probability a cell value will change.  R will draw a random number, if the random number is less than or equal to this value, the cell will change.
-The second number is added to the current cell value (e.g., if the cell value had been 20,  the new mean would be 20.25.  A new value for the cell would then be drawn from a normal distribution with a mean of 20.25 and a standard deviation of 1.
-} %% end sixth sublist (rnorm prob options)
-\item f.	landscape.wide.change: A change is applied to the entire landscape, but the difference in values between cells remains the same.  In this case, env.change.mag contains four elements:
-\itemize{ %% begin 7th list, landscape.wide.change options
-\item i.	the overall mean for the landscape.  This will be changed each time there is an environmental change in this layer
-\item ii.	the overall standard deviation for the landscape.  This will change each time there is an environmental change
-\item iii.	The change in overall mean
-\item iv.	The change in overall standard deviation
-\item Explanation: First, the overall mean and standard deviation in env.change.mag are updated based on elements iii. and iv.  Second, a change is drawn from a normal distribution the overall standard deviation (ii) (with a mean of 0).  Next, residuals for each cell are calculated by subtracting each cells value from the old landscape mean.  Finally, new cell values are created by taking the overall landscape mean, adding in the cell specific residuals, and adding the random change element.
-} %% End seventh sublist
-\item logn Change according to a log-normal distribution. Mean and variance as for rnorm.prob.
-\item beta Change according to a beta distribution value with mean and variance specified in c.mag (mean != alpha)
-\item fx Change using one of the distribution functions. See \link[spatialdemography]{distribution.functions} for more details.
-\item from.file Change is read in from the landscape file based on the new change.count
+ \item swap: this will randomize the locations of existing values in the
+      landscape element. env.change.mag should be 0 or NA for this env.change.type.
+ \item markov: this will change each value according to a Markov process,
+      based on traisition probabilities given in env.change.mag
+ \itemize{ %% Begin third sub-list (for markov option)
+   \item env.change.mag needs to have transition probabilities for each possible
+      value in the environmental layer
+   \item The possible values are given first, followed by transitions for first
+      layer value (to first, to second, etc), then transitions for the
+      second layer value (to first, to second, etc)
+   \item Transitions should be cumulative probabilities
+   \item For example: 0:1;0.681:1:0.275:1
+   \itemize{ %% Begin forth sub-list: example options
+     \item 0:1 correspond to two possible values in the landscape, 0 and 1.
+     \item 0.681 corresponds to the probability of going from 0 to 0.  The 1
+      indicates the cumulative transition probability (and will always be 1
+      for the last value). The probability of transitioning from 0 to 1 is
+      0.319 in this example (1 - 0.681, the preceding value. The probability
+      of transitioning from 1 to 0 is 0.275, and the probability of
+      transitioning from 1 to 1 is 0.725 (1 - 0.275).
+   } %% End forth sublist
+ } %% For markov option (third sublist)
+ \item markov.changing.transitions: The same as markov above, except with an
+       extra part of env.change.mag describing how the transition rates
+       themselves change with time.
+ \itemize{ %% Begin fifth sublist
+   \item For example 0:1;0.681:1:0.275:1;-0.05:0:-0.025:0
+   \item The last section -0.05:0:-0.025:0 corresponds to:
+   \item -0.05 this decreases the probability of transitioning from 0 to 0.
+   \item 0 This leaves the end point at 1. With the decrease in transition
+         probability for 0 to 0, this results in an increase in transition
+         probability of 0 to 1.
+   \item -0.025 leads to a decrease in the transition probability of going
+         from 1 to 0
+   \item 0 Keeps the cumulative probability distribution at 1, and
+         consequently will lead to increasing transition probabilities from
+         1 to 1.
+ } %% end fifth sublist (markov.changing.transitions descriptions)
+ \item cover.change.and.swap: (needs testing) this changes the initial cover
+       levels, then reassigns cover values to the landscape randomly based on
+       the new cover levels.  In this case, env.change.mag corresponds to the
+       incremental changes to overall cover levels.  These changes must
+       balance one another.  For example, if initial cover levels were 0.5,
+       0.25,0.25, and the value of env.change.mag was 0.25;-0.125;-0.125, at
+       each change step, the overall cover level after the first change would
+       be 0.75,0.125,0.125. Note that changes that result in cover levels
+       that cannot be assigned to the landscape (e.g., in a landscape of 4
+       cells, you could not have probabilities other than 0,.25,.5,.75, and 1).
+       Also note that a change that would reduce a cover level below 0 or
+       above 1 will result in a warning and no environmental change.
+ \item rnorm.prob: (needs testing) each value of a landscape element will
+       change with a specified probability.  If it changes, the mean will be
+       adjusted by a set value, and a new value will be drawn from a random
+       normal distribution with the new mean and a specified standard deviation.
+       In this case, env.change.mag needs to contain:
+ \itemize{ %% Begin sixth sublist
+   \item 1. the probability the cell will change
+   \item 2. the change in mean for the new value
+   \item 3. the overall standard deviation for drawing a new value
+   \item 4. Example: 0.5;0.25;1
+   \item 5. The first number gives the probability a cell value will change.
+         R will draw a random number, if the random number is less than or
+         equal to this value, the cell will change.
+         The second number is added to the current cell value (e.g., if the
+         cell value had been 20, the new mean would be 20.25. A new value for
+         the cell would then be drawn from a normal distribution with a mean
+         of 20.25 and a standard deviation of 1.
+ } %% end sixth sublist (rnorm prob options)
+ \item f. landscape.wide.change: A change is applied to the entire landscape,
+       but the difference in values between cells remains the same.
+       In this case, env.change.mag contains four elements:
+ \itemize{ %% begin 7th list, landscape.wide.change options
+   \item i. the overall mean for the landscape.  This will be changed each
+         time there is an environmental change in this layer
+   \item ii. the overall standard deviation for the landscape.
+         This will change each time there is an environmental change.
+   \item iii.The change in overall mean.
+   \item iv.The change in overall standard deviation.
+   \item Explanation: First, the overall mean and standard deviation in
+         env.change.mag are updated based on elements iii. and iv.
+         Second, a change is drawn from a normal distribution the overall
+         standard deviation (ii) (with a mean of 0).
+         Next, residuals for each cell are calculated by subtracting each
+         cells value from the old landscape mean.
+         Finally, new cell values are created by taking the overall landscape
+         mean, adding in the cell specific residuals, and adding the random
+         change element.
+ } %% End seventh sublist
+ \item logn Change according to a log-normal distribution. Mean and variance
+       as for rnorm.prob.
+ \item beta Change according to a beta distribution value with mean and
+       variance specified in c.mag (mean != alpha)
+ \item fx Change using one of the distribution functions. See
+       \link[spatialdemography]{distribution.functions} for more details.
+ \item from.file Change is read in from the landscape file based on the new
+       change.count
 } %% End second sublist, for non-conditional landscape elements
 \item For conditional landscape elements (cond.var is not set to NA):
 \itemize{ %% begin eight sublist - conditional landscape elements
-\item swap: (only valid for env.type == "cover", will not work for env.type == "rnorm"):  this will randomize the locations of existing values in the landscape elements, with the condition that values cannot be assigned to cells determined to be inappropriate based on another landscape element.  E.g. this can prevent mowing from occurring in forests, even when patterns of mowing or of forests changes (however if the proportion of the conditioning layer (e.g., forest) changes, this will not work properly (because there will be more or fewer suitable habitat patches than there are values to assign).  It only works if the conditional layer does not change, or changes via swap.  env.change.mag should be set to 0 or to NA for this setting.
-\item markov: b.	markov: See above under non-conditional landscape elements.  The markov transitions are only applied to cells that are suitable based on the other habitat type, non-suitable cells are automatically zero.
-\item markov.changing.transitions: c.	markov.changing.transition: See above under non-conditional landscape elements. The markov transitions are only applied to cells that are suitable based on the other habitat type, non-suitable cells are automatically zero.
-\item from.file Change is read in from the landscape file based on the new change.count
-} %% end eight sublist (conditional landscape elements)
+ \item swap: (only valid for env.type == 'cover', will not work for
+       env.type == 'rnorm'):  this will randomize the locations of existing
+       values in the landscape elements, with the condition that values
+       cannot be assigned to cells determined to be inappropriate based on
+       another landscape element.  E.g. this can prevent mowing from
+       occurring in forests, even when patterns of mowing or of forests
+       changes (however if the proportion of the conditioning layer (e.g.,
+       forest) changes, this will not work properly (because there will be
+       more or fewer suitable habitat patches than there are values to assign).
+       It only works if the conditional layer does not change, or changes via swap.
+       env.change.mag should be set to 0 or to NA for this setting.
+ \item markov: b.markov: See above under non-conditional landscape elements.
+       The markov transitions are only applied to cells that are suitable
+       based on the other habitat type, non-suitable cells are automatically
+       zero.
+ \item markov.changing.transitions: c.markov.changing.transition: See above
+       under non-conditional landscape elements. The markov transitions are
+       only applied to cells that are suitable based on the other habitat type,
+       non-suitable cells are automatically zero.
+ \item from.file Change is read in from the landscape file based on the new
+       change.count
+ } %% end eight sublist (conditional landscape elements)
 } %% End overall list
 }
 

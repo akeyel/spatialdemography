@@ -30,8 +30,8 @@
 #' @details \tabular{ll}{ %% Note tabular{ll} is tabular{lowercase(LL)} not tabular{11} 
 #' Package: \tab spatialdemography\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.10.3\cr
-#' Date: \tab 2015-04-02\cr
+#' Version: \tab 0.10.4\cr
+#' Date: \tab 2015-09-18\cr
 #' License: \tab GPL-2 (or later)\cr
 #' }
 #' @author Alexander "Sasha" Keyel & Jakob L.K. Gerstenlauer\cr
@@ -678,7 +678,29 @@ get.mod = function(env.val,opt.val,funct,par1,par2){
         modifier = num.clones / opt.val #This will later be multiplied by opt.val, allowing that part to cancel out leaving the new seed number.        
         check.constr = 0
         }
-        
+    
+    # Threshold response
+    if (funct == 106){
+      # Default is full suitability
+      modifier = 1
+      
+      lower.threshold = par1
+      upper.threshold = par2
+      
+      # If lower.threshold is not missing, check if environmental value is lower than that.
+      if (!is.na(lower.threshold)){
+        if (env.val < lower.threshold){
+          modifier = 0
+        }
+      }
+      
+      # If upper.threshold is not missing, check if environmental value is greater than upper threshold
+      if (!is.na(upper.threshold)){
+        if (env.val > upper.threshold){
+          modifier = 0
+        }
+      }
+    }
     
     if (check.constr == 1){
         #Check that modifier is plausible
