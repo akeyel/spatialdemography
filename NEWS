@@ -11,7 +11,7 @@ No option to change rounding in calculation of UTC response trait diversity
 KNOWN ISSUES:
 treatment of input paths for landscapes in the code requires improvement & increased clarity
 
-# Changes in 0.10.4.9999
+# Changes in 0.10.5
 Fixed problem where landscape.dir would return an error if an entire landscape is input.
 Added documentation to indicate that a pre-existing R object landscape can be used as an input
 Matrix dependency for transpose function used on sparse matrices made explicit in code.

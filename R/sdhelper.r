@@ -678,7 +678,7 @@ get.mod = function(env.val,opt.val,funct,par1,par2){
         modifier = num.clones / opt.val #This will later be multiplied by opt.val, allowing that part to cancel out leaving the new seed number.        
         check.constr = 0
         }
-    
+
     # Threshold response
     if (funct == 106){
       # Default is full suitability
@@ -736,7 +736,7 @@ get.mod = function(env.val,opt.val,funct,par1,par2){
 #' @author Jakob Gerstenlauer and Alexander "Sasha" Keyel
 #'
 CreateCompositeDemographyMatrix = function(B1.template,B2.template,spe,SpTraits,p,S,landscape,landscape.identifiers){
-      
+
     evt = SpTraits #Patch, because I don't want to replace the old evt with SpeciesTraits each time.
 
     #Incoming format for species traits needs to be:

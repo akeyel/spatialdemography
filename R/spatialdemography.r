@@ -214,8 +214,8 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
   # Check if opath exists, if not, create it #**# May want an option to turn this off - people may not want the model writing to their computers without permission! But that's the least of my infractions at this point!
   dir.create(opath, showWarnings = F, recursive = T)
   dir.create(run.path, showWarnings = F, recursive = T)
-  
-	#Check if required packages are installed
+
+  #Check if required packages are installed
 	check.packages(out.metrics, include.copula)
     if (write.timefile > 0) {
         # Set up file for timing results
