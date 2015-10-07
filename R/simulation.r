@@ -265,7 +265,7 @@ Simulation<-function(Model.Name,
             for (sp in 1:spe){
                  
                 #Demography 1 & migration for all species
-                nt1a.lst[[sp]] <- t(P) %*% M.lst[[sp]] %*% P %*% B1.lst[[sp]] %*% n0.lst[[sp]]
+                nt1a.lst[[sp]] <- Matrix::t(P) %*% M.lst[[sp]] %*% P %*% B1.lst[[sp]] %*% n0.lst[[sp]]
                 }
                 
             if (RunTime == 1){

@@ -30,8 +30,8 @@
 #' @details \tabular{ll}{ %% Note tabular{ll} is tabular{lowercase(LL)} not tabular{11} 
 #' Package: \tab spatialdemography\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.10.4\cr
-#' Date: \tab 2015-09-18\cr
+#' Version: \tab 0.10.5\cr
+#' Date: \tab 2015-09-29\cr
 #' License: \tab GPL-2 (or later)\cr
 #' }
 #' @author Alexander "Sasha" Keyel & Jakob L.K. Gerstenlauer\cr
@@ -292,7 +292,7 @@ is.ergodic=function(x){
     order=sqrt(length(x))
     
     #create an object 'xt' that is the transpose of x
-    xt=t(x)
+    xt=Matrix::t(x)
     
     #create an object 'lefteigvec' that is the dominant right eigenvector of xt, hence the dominant
     #left eigenvector of x
@@ -736,6 +736,7 @@ get.mod = function(env.val,opt.val,funct,par1,par2){
 #' @author Jakob Gerstenlauer and Alexander "Sasha" Keyel
 #'
 CreateCompositeDemographyMatrix = function(B1.template,B2.template,spe,SpTraits,p,S,landscape,landscape.identifiers){
+      
     evt = SpTraits #Patch, because I don't want to replace the old evt with SpeciesTraits each time.
 
     #Incoming format for species traits needs to be:
@@ -859,8 +860,11 @@ CreateCompositeDemographyMatrix = function(B1.template,B2.template,spe,SpTraits,
         dim(B2)<-rep(S*p,2)
     
         #Transpose matrices so that the correct vital rate is in the correct location        
-        B1<-t(B1)
-        B2<-t(B2)
+        #message(B1)
+        #message(typeof(B1))
+        
+        B1<-Matrix::t(B1)
+        B2<-Matrix::t(B2)
 
         #Write the matrices to a list keyed to species number
         B1.lst = append(B1.lst,B1)
@@ -4919,7 +4923,7 @@ prep.output = function(in.spar.mat,change.count,sp,cell = ""){
 matrix.as.vector = function(in.mat){
 
     #Transpose matrix, then convert to one column.
-    mat.out = t(in.mat)
+    mat.out = Matrix::t(in.mat)
     mat.out = matrix(mat.out, nrow = 1)
     
     return(mat.out)
@@ -5010,7 +5014,7 @@ compute.diagnostics = function(spe,B1.lst,B2.lst,M.lst,P,S,p,outpath.base,vdb.da
         M = M.lst[[sp]]
         
         #Calculate overall lambda for each species
-        A <- B2 %*% t(P) %*% M %*% P %*% B1
+        A <- B2 %*% Matrix::t(P) %*% M %*% P %*% B1
 
         if (is.first == 1 & sp == 1){
             run.times = c(run.times,gettime()); run.lbl = c(run.lbl,"A matrix calculated for sp 1")

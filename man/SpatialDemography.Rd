@@ -52,9 +52,11 @@ response traits is to occur (Optional - not needed if using pre-existing
 species file). See \link[spatialdemography]{sp.resp.instr.file} for details.}
 
 \item{landscape.dir}{(not used if generating new landscapes) The directory
-where the landscape files may be found.
-See \link[spatialdemography]{landscape.files} for more information about
-the files themselves.}
+where the landscape files may be found or a list object containing the
+landscape information. See \link[spatialdemography]{landscape.files} for
+more information on the files, and see
+\link[spatialdemography]{landscape.object} for information on using a
+landscape generated in R.}
 
 \item{locations.file}{(should be 'none' if spatialdemography is assigning
 species to the landscape) A file containing initial locations of species.

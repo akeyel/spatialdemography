@@ -39,9 +39,11 @@
 #' response traits is to occur (Optional - not needed if using pre-existing 
 #' species file). See \link[spatialdemography]{sp.resp.instr.file} for details.
 #' @param landscape.dir (not used if generating new landscapes) The directory  
-#' where the landscape files may be found.
-#' See \link[spatialdemography]{landscape.files} for more information about  
-#' the files themselves.
+#' where the landscape files may be found or a list object containing the
+#' landscape information. See \link[spatialdemography]{landscape.files} for
+#' more information on the files, and see
+#' \link[spatialdemography]{landscape.object} for information on using a
+#' landscape generated in R.
 #' @param locations.file (should be 'none' if spatialdemography is assigning  
 #' species to the landscape) A file containing initial locations of species.  
 #' See (\link[spatialdemography]{locations.file}) for more information
@@ -209,6 +211,10 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
         write.timefile = 0
     }
     
+  # Check if opath exists, if not, create it #**# May want an option to turn this off - people may not want the model writing to their computers without permission! But that's the least of my infractions at this point!
+  dir.create(opath, showWarnings = F, recursive = T)
+  dir.create(run.path, showWarnings = F, recursive = T)
+  
 	#Check if required packages are installed
 	check.packages(out.metrics, include.copula)
     if (write.timefile > 0) {
@@ -351,7 +357,7 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
     
     # If using landscape directory is missing or in the default location, 
     # set to default conditions.
-    if (landscape.dir == "default") {
+    if (landscape.dir[1] == "default") {
         landscape.dir = sprintf("%s/landscape/", run.path)
     }
     
@@ -839,6 +845,19 @@ NULL
 #' @name landscape.files
 NULL
 
+#' The landscape object
+#' 
+#' An alternative to inputing a landscape directory is to construct the
+#' landscape in R. To do this, there must be a list, containing a vector for
+#' each environmental variable (in the same order as they are listed in the 
+#' environmental layers file, see \link[spatialdemography]{env.file}). The 
+#' vector should contain the values for each cell in a square landscape, given
+#' by rows (i.e. starting at the top left and going to top right, then down
+#' to next row, and so forth, until the bottom right corner is reached). Note
+#' that the data are given in vector format, not as a square matrix.
+#' 
+#' @name landscape.object
+NULL
 
 #' Initial Species Locations File
 #'
