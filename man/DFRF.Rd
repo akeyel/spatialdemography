@@ -59,12 +59,17 @@ Function Code \tab Function \tab Description \cr
                                       plausible/realistic/possible values is
                                       left to the investigator \cr
 104  \tab seed fertility         \tab Get seed number based on the approach
-                                      in the Stochastic Plants paper
+                                      in the Stochastic Plants paper (in prep)
                                       opt.val = value specified as base vr
                                       for clone production (allows
                                       calculation of the modifier)
-                                      par1 = biomass.adult:biomass.seed:biomass.clone
-                                      par2 = relative.allocation.reproduction (a):ratio.sex.allocation (g) TODO (sten): this is hard to understand intuitively
+                                      par1 = Three entries separated by colons:
+                                        biomass.adult:biomass.seed:biomass.clone
+                                      par2 = Two entries separated by a colon:
+                                        relative.allocation.reproduction:
+                                        ratio.sex.allocation.
+                                      relative.allocation.reproduction is (a)
+                                      and ratio.sex.allocation is (g)
                                       q = biomass.adult * a * fertility
                                       #fertility is given by the environmental
                                       layer and is in grams

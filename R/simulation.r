@@ -56,7 +56,7 @@
 #' @param repro.proportion The proportion of the species reproductive potential with which to invade
 #' @param K_g The carrying capacity in grams
 #' @param multi.species.K An indicator for whether or not to include a multispecies carrying capacity
-#' @param edge.type The edge type. Currently only Absorbing and Torus are supported
+#' @param edge.type The edge type. Currently only ABSORBING and TORUS are supported
 #' @param do.simulation An indicator for whether or not to run the simulation
 #' @param do.diagnostics An indicator for whether or not to compute diagnostics
 #' @param testing An indicator for whether or not a testing run is being conducted

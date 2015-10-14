@@ -249,11 +249,21 @@ sp.resp.instr.rile = NA
 ## Examine the species file
 spf = read.csv(spfile)
 # Display first part of species file
-knitr::kable(head(spf[ ,1:14]))
+knitr::kable(head(spf[ ,1:10]))
 ```
   
 **sp** gives the identity of each species. Species must be numbered consecutively starting at 1.  
-**p01 .. p33** These correspond to the base vital rates for each species. The first number is the stage of origin, the second is the destination stage. E.g., p12 is the transition from stage 1 to stage 2.  
+**p01 .. p33** These correspond to the base vital rates for each species. The first number is the stage of origin, the second is the destination stage. E.g., p12 is the transition from stage 1 to stage 2. See the below LifeCycle graph for an illustration.
+
+![alt text](LifeCycleGraph_small.tif)
+ 
+
+
+```{r}
+# Display middle part of species file (adult biomass and dispersal traits)
+knitr::kable(head(spf[ ,11:14]))
+```
+
 **biomass.adult** The biomass of an adult, in g. This is used with respect to the carrying capacity.
 **dispersalfunction** An option to set the dispersal function. Currently the default is 1, which gives log-normal dispersal.
 **disppar1** The first parameter for the dispersal function. For log-normal dispersal, this is mean dispersal distance, in cells.

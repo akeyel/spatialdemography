@@ -5,11 +5,17 @@ Troubleshoot and improve quantile regression options
 Add checks to trait calculation to ensure that vital rates are within the allowable range.
 
 KNOWN BUGS:
-An error where Matrix package is not being loaded (perhaps it is exported in the namespace but not in the Description? Does this matter? Note that description and namespace currently do not match regarding packages
-No option to change rounding in calculation of UTC response trait diversity
 
 KNOWN ISSUES:
-treatment of input paths for landscapes in the code requires improvement & increased clarity
+No option to change rounding in calculation of UTC response trait diversity
+Treatment of input paths for landscapes in the code requires improvement & increased clarity
+Need to figure out how to not have the vignette code in two places (vignette folder & inst/docs folder)
+Semi-colon as delimiter in code makes .csv files difficult to open in Excel on German computers as they use the ";" instead of the "," to separate fields.
+
+# Changes in 0.10.6
+Removed extraneous code from vignettes
+Added lifecycle graph to Vignette
+Cleaned up comments from Sten in spatialdemography.r file
 
 # Changes in 0.10.5
 Fixed problem where landscape.dir would return an error if an entire landscape is input.

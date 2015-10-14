@@ -11,8 +11,8 @@ Package to run a spatially explicit, matrix-based metacommunity model
 \tabular{ll}{ %% Note tabular{ll} is tabular{lowercase(LL)} not tabular{11}
 Package: \tab spatialdemography\cr
 Type: \tab Package\cr
-Version: \tab 0.10.5\cr
-Date: \tab 2015-09-29\cr
+Version: \tab 0.10.6\cr
+Date: \tab 2015-10-14\cr
 License: \tab GPL-2 (or later)\cr
 }
 }

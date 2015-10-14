@@ -75,7 +75,7 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
                                              "FTD.UTC", "RTD.UTC"), 
                              testing = F) {
     
-    # For troubleshooting TODO(sten): you may want to remove the following in the published version         
+    # For troubleshooting
     #landscape.dir = 'default'; 
     #locations.file = 'none'; 
     #scale.vec = c('landscape'); 
@@ -85,30 +85,18 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
     #initial.conditions.file = ic; settings.file = set; env.file = ef;
     
     # Set up script settings that are fixed & load required packages
-    
-    # Create a variable for accessing the origianl working directory.  
-    # Needed by shiny part of code
-    # TODO(sten): uncomment or delete it 
-    #bpath = getwd()
-    
+        
     S = 4  # Number of stages in the model
-    c.gen = NA  # This currently does nothing TODO(sten): But what is it ment to do? 
+    c.gen = NA  # This currently does nothing, originally envisioned as a way to allow generation of correlated traits.
     rtd.c = 0  # Other options are not yet scripted
-    
-    # Size of cells in the landscape. This is no longer needed - only affects 
-    # dispersal probabilities and carrying capacity, and those should be put in 
-    # terms of the cell size external to the model.
-    # TODO(sten): You may want to remove this 
-    #cell.size = 50
-    
+        
     # input for calculation of UTC - tells it not to use a log-transform
     log.trans = 0
     
-    # Number of decimal places for which to round trait values. 2 is recommended 
-    # with a log-transform, but that may not apply anymore #**# This is still 
-    # inappropriate for some columns.  Except if they do not change, it doesn't 
-    # matter. & only really matters for scaled UTC, which I'm not currently using.
-    # TODO(sten): Modify this comment so other may understand it easyly.
+    # The default calculation of multivariate richness requires rounding
+    # resolution specifies the number of decimal places to round to.
+    # 2 is currently a hardwired default. This may become an input parameter
+    # in later versions of spatialdemography
     resolution = 2
     start.time = proc.time()[3]  # Get starting time for model run
     
@@ -119,7 +107,7 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
     #run.times = c(run.times,gettime()) 
     #run.lbl = c(run.lbl,'loading files and packages completed')
     
-    # Check that scn is a number TODO(sten): name what scn is
+    # Check that scn is a number
     if (is.na(as.num(scn))) {
         stop("scn (scenario identifier) input must be numeric, not character.")
     }
@@ -137,15 +125,12 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
     # Restrict data in memory to only that pertaining to the scenario at hand
     ic = ic[scn, ]
     
-    # Convert initial conditions to variable names 
-    # Note: some of these columns should only be read in if they are applicable. 
-    # Then you can have them be optional. TODO(sten): explain this more in detail
+    # Read in variables from the initial conditions file
+    #as.num is a custom function to save writing as.numeric(as.character(x))
     Model.Name = as.character(ic[["ModelName"]])
-    extent = as.num(ic[["Extent"]])  # as.num is a custom function from myr.r TODO(sten): make this function publically available
-    
-    # Not from ic, but defined here because it is related to the extent
-    p = extent^2  
-    edge.type = as.character(ic[["Edge.Type"]])  # Options are TORUS and ABSORBING
+    extent = as.num(ic[["Extent"]])
+    p = extent ^ 2  # Not from ic; defined here as it is related to the extent
+    edge.type = as.character(ic[["Edge.Type"]])  # Options: TORUS and ABSORBING
     MaxTime = as.num(ic[["MaxTime"]])
     K_g = as.num(ic[["K_g"]])
     multi.species.K = as.num(ic[["multi.species.K"]])
@@ -155,13 +140,10 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
     num.invaders = as.num(ic[["num.invaders"]])
     cells.to.invade = as.num(ic[["cells.to.invade"]])
     repro.proportion = as.num(ic[["invader.repro.proportion"]])
-    
     # num.adult and starting.biomass are extracted if/when needed 
-    # TODO(sten): explain that more in detail i.e. where in the code
     tot.sp.num = as.num(ic[["Tot.sp.rich"]])
     # land.sp.num, patch.sp.num, target.tot.rtd, land.rtd, loc.rtd 
     # now extracted at the relevant point in species assignment.  
-    # TODO(sten): explain that more in detail
     
     # Read in settings file (or leave as is, if it is an R object)
     if (typeof(settings.file) == "character") {
@@ -177,7 +159,6 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
     # compatibility and allows for smaller file sizes (optional columns then are 
     # not required.)
     vdb.data = settings[["GenerateVisualDebuggerData"]]
-    #vdb.run = settings[[2]] TODO(sten): delete or explain why it is commented out
     generate.spp = settings[["GenerateNewSpecies"]]
     new.landscape = settings[["GenerateNewLandscape"]]
     
@@ -185,12 +166,11 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
     lnd.lbl = as.character(settings[["lnd.lbl"]])
     
     # This will come in as NULL if there is no 'include.copula' column.  
-    # For once in my life, that is convenient. TODO(sten): remove convessions
-    
     include.copula = settings[["include.copula"]]
-    #rtd.classification = rtd.c = settings[['rtd.c']] TODO(sten): delete or explain why it is commented out
-    #do.eigen.maps = settings[['GenerateEigenMaps']] TODO(sten): delete or explain why it is commented out
-    #do.disp.maps = settings[['GenerateDispersalMaps']] TODO(sten): delete or explain why it is commented out
+    # Old settings that may reappear in the code at a later version
+    #rtd.classification = rtd.c = settings[['rtd.c']]
+    #do.eigen.maps = settings[['GenerateEigenMaps']]
+    #do.disp.maps = settings[['GenerateDispersalMaps']]
     
     # May not be of interest if transient dynamics from the simulation is the goal.
     do.diagnostics = settings[["RunMatrixDiagnostics"]]
@@ -220,7 +200,6 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
     if (write.timefile > 0) {
         # Set up file for timing results
         timefile = sprintf("%sTimefile.csv", opath)
-        # if (file.exists('timefile')){ file.remove(timefile) } TODO(sten): explain or delete this
     }
     
     # Create a pdf to store graphical outputs
@@ -237,15 +216,11 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
     run.lbl = c(run.lbl, "MCsetup complete")
     
     ## Set up output fields 
-    #scale.vec = c('landscape') TODO(sten): delete or explain why it is commented out
-    #scale.cells.lst = list(rep(T,p)) TODO(sten): delete or explain why it is commented out
     timepoint.vec = c("Initial", "Final", "Change")
     nrow.results = length(scale.vec) * length(timepoint.vec)
     
-    ## Set up results file 
-    #Results = setup.results(ResultsFile,out.metrics,scale.vec) TODO(sten): delete or explain why it is commented out
+    ## Set up results file     
     Results = setup.results.v2(ResultsFile, out.metrics, nrow.results)  
-    #ResultsFile,out.metrics,scale.vec, timepoint.vec TODO(sten): delete or explain why it is commented out
     
     # Set Scenario-specific results
     Results$Scenario[1:nrow.results] = Model.Name
@@ -329,19 +304,17 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
     
     # Convert first column to row names (not done with row.names = 1 in read.csv 
     # because they were coming in as factors!
+    # env.lbl contains one letter indicators for each environmental variable.
     rownames(my.env) = as.character(my.env$env.lbl)
     my.env$env.lbl = NULL
-    
-    # Convert from factor to character to avoid problems. TODO(sten): delete or explain why commented out
-    # my.env$env.change.mag = as.character(my.env$env.change.mag)
-    
+    env.lbl = row.names(my.env)
+  
     env.c.freq = as.num(my.env[["env.change.freq"]])
     # Check if any environmental layers will change
     is.change = change.check(env.c.freq)
     
-    # TODO(sten): explain env.lbl
-    env.lbl = row.names(my.env)
-    landscape.identifiers = as.character(my.env[["landscape.identifiers"]])
+    # Get snames of environmental variables
+        landscape.identifiers = as.character(my.env[["landscape.identifiers"]])
     
     # Check if landscape files need to be created based on a copula Check if 
     # column is included in settings file
@@ -421,7 +394,8 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
             lnd.lbl = ""
         }
         
-        # TODO(sten): explain or delete inpath = sprintf('%s/landscape/',new.landscape)
+        # Old code that may become relevant when re-organizing this section
+        # inpath = sprintf('%s/landscape/',new.landscape)
         
         if (typeof(landscape.dir) == "character") {
             inpath = landscape.dir
@@ -466,8 +440,7 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
     run.times = c(run.times, gettime())
     run.lbl = c(run.lbl, "Scenario Setup complete")
     
-    #### Run the simulation for the input parameters #### #disp.pdf,eigen.pdf,
-    # TODO (sten): Explain the above mentioned file names
+    #### Run the simulation for the input parameters #### 
     Results = Simulation(Model.Name, ResultsFile, vdb.data, 
                          timefile, write.timefile, run.times, 
                          run.lbl, start.time, run.path, 
@@ -485,8 +458,11 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
                          invasion, num.invaders, cells.to.invade, 
                          repro.proportion, K_g, multi.species.K, 
                          edge.type, do.simulation, do.diagnostics, 
-                         testing)  #,do.eigen.maps,do.disp.maps #Removed: species.locs, n.seed,n.juv,n.adult,
-                                   # TODO (sten) explain why these parameters are commented out.
+                         testing)
+  # cut input parameters that may later reappear: disp.pdf,eigen.pdf,
+  #   do.eigen.maps, do.disp.maps, species.locs, n.seed,
+  #   n.juv,n.adult,
+                
     return(Results)
 }  #END OF FUNCTION
 
@@ -859,6 +835,17 @@ NULL
 #' @name landscape.object
 NULL
 
+
+#' Cell Size
+#' The size of the cell is determined by the researcher, and needs to be
+#' accounted for when setting up carrying capacities and dispersal
+#' probabilities. The model was originally constructed with a 50 x 50 m
+#' cell size in mind.
+#' 
+#' @name cell.size
+NULL
+
+
 #' Initial Species Locations File
 #'
 #' An Initial Species Locations File is also optional, and should only be
@@ -873,7 +860,8 @@ NULL
 #' format of the SpeciesData.csv file generated by the model. The header should 
 #' include (in this order): LifeStage, Species, TimeStep, Cells (one column for 
 #' each cell in the landscape) Only locations from a single (user-specified) 
-#' timestep will be extracted.
+#' timestep will be extracted. Note that cell sizes are not specified directly
+#' in the model, see \link[spatialdemography]{cell.size} for more details.
 #'
 #' @name locations.file
 NULL
@@ -1150,12 +1138,17 @@ NULL
 #'                                       plausible/realistic/possible values is 
 #'                                       left to the investigator \cr
 #' 104  \tab seed fertility         \tab Get seed number based on the approach 
-#'                                       in the Stochastic Plants paper
+#'                                       in the Stochastic Plants paper (in prep)
 #'                                       opt.val = value specified as base vr 
 #'                                       for clone production (allows 
 #'                                       calculation of the modifier)
-#'                                       par1 = biomass.adult:biomass.seed:biomass.clone
-#'                                       par2 = relative.allocation.reproduction (a):ratio.sex.allocation (g) TODO (sten): this is hard to understand intuitively 
+#'                                       par1 = Three entries separated by colons:
+#'                                         biomass.adult:biomass.seed:biomass.clone
+#'                                       par2 = Two entries separated by a colon:
+#'                                         relative.allocation.reproduction:
+#'                                         ratio.sex.allocation.
+#'                                       relative.allocation.reproduction is (a)
+#'                                       and ratio.sex.allocation is (g)
 #'                                       q = biomass.adult * a * fertility   
 #'                                       #fertility is given by the environmental 
 #'                                       layer and is in grams

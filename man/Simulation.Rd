@@ -109,7 +109,7 @@ Simulation(Model.Name, ResultsFile, vdb.data, timefile, write.timefile,
 
 \item{multi.species.K}{An indicator for whether or not to include a multispecies carrying capacity}
 
-\item{edge.type}{The edge type. Currently only Absorbing and Torus are supported}
+\item{edge.type}{The edge type. Currently only ABSORBING and TORUS are supported}
 
 \item{do.simulation}{An indicator for whether or not to run the simulation}
 
