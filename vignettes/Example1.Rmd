@@ -8,6 +8,9 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
+# Citation
+Keyel, A.C., Gerstenlauer, J.L.K. and Wiegand, K. YEAR. SpatialDemography: a new, spatially explicit, stage-structured, metacommunity model for studying plant demography. Ecography 000: 000-000
+
 ## Introduction
 
 This first example is designed to illustrate the basic concepts of the SpatialDemography model. This example demonstrates the importance of a model being both spatially explicit and of modeling the dynamics of multiple species simultaneously.

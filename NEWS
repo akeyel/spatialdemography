@@ -1,16 +1,25 @@
-#Changes to be (possibly) implemented in a future version
-Need to fix application of rtd.c (idea is to classify some of the response traits in a user-defined manner.  Currently broken.
-Discrete individual version?
-Troubleshoot and improve quantile regression options
-Add checks to trait calculation to ensure that vital rates are within the allowable range.
-
 KNOWN BUGS:
+None
 
 KNOWN ISSUES:
 No option to change rounding in calculation of UTC response trait diversity
 Treatment of input paths for landscapes in the code requires improvement & increased clarity
 Need to figure out how to not have the vignette code in two places (vignette folder & inst/docs folder)
 Semi-colon as delimiter in code makes .csv files difficult to open in Excel on German computers as they use the ";" instead of the "," to separate fields.
+Dispersal table warning message is not intuitive to someone who has never experienced the problem before. More description and more useful description is needed.
+
+POTENTIAL FUTURE IMPROVEMENTS:
+Provide option to allow dropping fractional individuals to prevent species 'resurrection'
+Allow dispersal at stages other than 0
+Allow more than 4 stages
+Include juveniles in the competition with adults (or an option to do so)
+Add quantile regression options for output
+Add checks to trait calculation to ensure that vital rates are within the allowable range.
+
+CHANGE LOG
+# Changes in 1.0.0
+Updated NEWS to contain a list of potential future code improvements
+Changed version number to 1.0.0 as part of a manuscript submission requirement
 
 # Changes in 0.10.6
 Removed extraneous code from vignettes

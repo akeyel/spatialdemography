@@ -1,8 +1,8 @@
 Package: spatialdemography
 Type: Package
 Title: A Spatially Explicit Metacommunity Model
-Version: 0.10.6
-Date: 2015-10-14
+Version: 1.0.0
+Date: 2015-11-14
 Author: Alexander "Sasha" Keyel and Jakob L.K. Gerstenlauer
 Maintainer: Sasha Keyel <skeyel@gmail.com>
 Description: This is a spatially explicit metacommunity model that can be used
