@@ -1,5 +1,5 @@
 ---
-title: "SpatialDemography Example 1"
+title: "Appendix 3: SpatialDemography Example"
 author: "Alexander C. Keyel <skeyel@gmail.com>"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -8,12 +8,12 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
-# Citation
+## Citation
 Keyel, A.C., Gerstenlauer, J.L.K. and Wiegand, K. YEAR. SpatialDemography: a new, spatially explicit, stage-structured, metacommunity model for studying plant demography. Ecography 000: 000-000
 
 ## Introduction
 
-This first example is designed to illustrate the basic concepts of the SpatialDemography model. This example demonstrates the importance of a model being both spatially explicit and of modeling the dynamics of multiple species simultaneously.
+This example is designed to illustrate the basic concepts of the SpatialDemography model. This example demonstrates the importance of a model being both spatially explicit and of modeling the dynamics of multiple species simultaneously.
 
 In this example, we consider a landscape that is a mosaic of grassland and forest habitat. We will consider three hypothetical grassland species. Species 1 is r-selected, and reproduces strongly due to a high SLA, but is short-lived and susceptible to an herbicide. Species 2 has lower resource accumulation (k-selected, low SLA) and therefore has lower reproductive rates. However, it invests more strongly in defense and is therefore longer lived and it is resistant to the herbicide. Species 3 shows intermediate reproductive potential (intermediate SLA), and is also susceptible to the herbicide. Unlike the other two species, it can survive in forest habitat. Species 1 and 2 are initially widespread in the landscape, while Species 3 is initially found only in the forested corner of the landscape (Cell 4).
 

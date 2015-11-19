@@ -10,9 +10,9 @@
 
 <meta name="author" content="Alexander C. Keyel skeyel@gmail.com" />
 
-<meta name="date" content="2015-10-14" />
+<meta name="date" content="2015-11-18" />
 
-<title>SpatialDemography Example 1</title>
+<title>Appendix 3: SpatialDemography Example</title>
 
 
 
@@ -52,15 +52,19 @@ code > span.er { color: #ff0000; font-weight: bold; }
 
 
 <div id="header">
-<h1 class="title">SpatialDemography Example 1</h1>
+<h1 class="title">Appendix 3: SpatialDemography Example</h1>
 <h4 class="author"><em>Alexander C. Keyel <a href="mailto:skeyel@gmail.com">skeyel@gmail.com</a></em></h4>
-<h4 class="date"><em>2015-10-14</em></h4>
+<h4 class="date"><em>2015-11-18</em></h4>
 </div>
 
 
+<div id="citation" class="section level2">
+<h2>Citation</h2>
+<p>Keyel, A.C., Gerstenlauer, J.L.K. and Wiegand, K. YEAR. SpatialDemography: a new, spatially explicit, stage-structured, metacommunity model for studying plant demography. Ecography 000: 000-000</p>
+</div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>This first example is designed to illustrate the basic concepts of the SpatialDemography model. This example demonstrates the importance of a model being both spatially explicit and of modeling the dynamics of multiple species simultaneously.</p>
+<p>This example is designed to illustrate the basic concepts of the SpatialDemography model. This example demonstrates the importance of a model being both spatially explicit and of modeling the dynamics of multiple species simultaneously.</p>
 <p>In this example, we consider a landscape that is a mosaic of grassland and forest habitat. We will consider three hypothetical grassland species. Species 1 is r-selected, and reproduces strongly due to a high SLA, but is short-lived and susceptible to an herbicide. Species 2 has lower resource accumulation (k-selected, low SLA) and therefore has lower reproductive rates. However, it invests more strongly in defense and is therefore longer lived and it is resistant to the herbicide. Species 3 shows intermediate reproductive potential (intermediate SLA), and is also susceptible to the herbicide. Unlike the other two species, it can survive in forest habitat. Species 1 and 2 are initially widespread in the landscape, while Species 3 is initially found only in the forested corner of the landscape (Cell 4).</p>
 <p>We will examine the metacommunity dynamics of these three species given the initial conditions and an herbicide treatment during the 7th and 8th time steps.</p>
 </div>
@@ -75,10 +79,6 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <span class="co"># Load the spatialdemography package</span>
 <span class="kw">library</span>(spatialdemography)</code></pre>
 <pre><code>## Loading required package: Matrix</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Require jpeg package for printing life cycle graph (not needed by SpatialDemography model)</span>
-<span class="kw">require</span>(jpeg)</code></pre>
-<pre><code>## Loading required package: jpeg</code></pre>
-<pre><code>## Warning: package 'jpeg' was built under R version 3.1.3</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Set up a RunName.</span>
 <span class="co"># Not actually an input, but we'll use it to build some of the required inputs</span>
 run.name =<span class="st"> &quot;spdem_ex1&quot;</span>
