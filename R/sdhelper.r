@@ -30,8 +30,8 @@
 #' @details \tabular{ll}{ %% Note tabular{ll} is tabular{lowercase(LL)} not tabular{11} 
 #' Package: \tab spatialdemography\cr
 #' Type: \tab Package\cr
-#' Version: \tab 1.0.0\cr
-#' Date: \tab 2015-11-14\cr
+#' Version: \tab 1.0.0.9999\cr
+#' Date: \tab 2015-12-12\cr
 #' License: \tab GPL-2 (or later)\cr
 #' }
 #' @author Alexander "Sasha" Keyel & Jakob L.K. Gerstenlauer\cr

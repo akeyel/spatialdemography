@@ -15,6 +15,7 @@ Allow more than 4 stages
 Include juveniles in the competition with adults (or an option to do so)
 Add quantile regression options for output
 Add checks to trait calculation to ensure that vital rates are within the allowable range.
+Drop landscape.identifiers and just use the entire environmental layer name in the code (would allow two environmental variables to start with the same name)
 
 CHANGE LOG
 # Changes in 1.0.0

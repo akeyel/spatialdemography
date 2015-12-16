@@ -313,7 +313,7 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
     # Check if any environmental layers will change
     is.change = change.check(env.c.freq)
     
-    # Get snames of environmental variables
+    # Get names of environmental variables
         landscape.identifiers = as.character(my.env[["landscape.identifiers"]])
     
     # Check if landscape files need to be created based on a copula Check if 
