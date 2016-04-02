@@ -1,0 +1,5 @@
+env.lbl,landscape.identifiers,env.type,cover.levels,param1,param2,cond.lyr,cond.vals,env.change.freq,env.change.type,env.change.mag
+landcover,L,cover,0.75;0.25,1,NA,NA,NA,0,swap,0
+herbicide,H,NA,NA,NA,NA,NA,NA,1,from.file,0
+environmental_stochasticity,E,NA,NA,NA,NA,NA,NA,1,landscape.wide.change,1;1;0;0
+microhabitat_stochasticity,M,NA,NA,NA,NA,NA,NA,1,rnorm.prob,1;0;1

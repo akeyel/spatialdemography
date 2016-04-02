@@ -56,8 +56,8 @@
 #' @param out.metrics Metrics to calculate for the model run. 
 #' See \link[spatialdemography]{out.metrics} for details.
 #' @param testing An indicator for whether test files are being run. Defaults to F.
-#' @return No direct results are returned from the function.  However, the 
-#' function writes several files.
+#' @return The main purpose of the model is to produce files, however, the core results are 
+#' also returned.
 #' See \link[spatialdemography]{Results.Outputs} for a summary.
 #' @author A.C. Keyel
 #' @template mycitation
@@ -144,6 +144,7 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
     tot.sp.num = as.num(ic[["Tot.sp.rich"]])
     # land.sp.num, patch.sp.num, target.tot.rtd, land.rtd, loc.rtd 
     # now extracted at the relevant point in species assignment.  
+    extinction.threshold = as.num(ic[["extinction.threshold"]])
     
     # Read in settings file (or leave as is, if it is an R object)
     if (typeof(settings.file) == "character") {
@@ -457,6 +458,7 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
                          resolution, log.trans, MaxTime, 
                          invasion, num.invaders, cells.to.invade, 
                          repro.proportion, K_g, multi.species.K, 
+                         extinction.threshold,
                          edge.type, do.simulation, do.diagnostics, 
                          testing)
   # cut input parameters that may later reappear: disp.pdf,eigen.pdf,
@@ -531,6 +533,7 @@ SpatialDemography = function(scn, s.lbl, file.ending, DispPath, run.path, opath,
 #'                       from the species responses file. \cr
 #' Land.rtd         \tab Total landscape response trait diversity. \cr
 #' Loc.rtd          \tab Total local response trait diversity. \cr
+#' extinction.threshold \tab An optional extinction threshold where abundances below the threshold are rounded to 0 \cr
 #' }
 #' @name initial.conditions.file
 NULL

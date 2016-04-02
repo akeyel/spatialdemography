@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Alexander C. Keyel skeyel@gmail.com" />
+
+<meta name="date" content="2016-04-01" />
+
+<title>Appendix 5: SpatialDemography Example with Stochasticity</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<link href="data:text/css,body%20%7B%0A%20%20background%2Dcolor%3A%20%23fff%3B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20max%2Dwidth%3A%20700px%3B%0A%20%20overflow%3A%20visible%3B%0A%20%20padding%2Dleft%3A%202em%3B%0A%20%20padding%2Dright%3A%202em%3B%0A%20%20font%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0A%20%20font%2Dsize%3A%2014px%3B%0A%20%20line%2Dheight%3A%201%2E35%3B%0A%7D%0A%0A%23header%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0A%0A%23TOC%20%7B%0A%20%20clear%3A%20both%3B%0A%20%20margin%3A%200%200%2010px%2010px%3B%0A%20%20padding%3A%204px%3B%0A%20%20width%3A%20400px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20border%2Dradius%3A%205px%3B%0A%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20font%2Dsize%3A%2013px%3B%0A%20%20line%2Dheight%3A%201%2E3%3B%0A%7D%0A%20%20%23TOC%20%2Etoctitle%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%20%20font%2Dsize%3A%2015px%3B%0A%20%20%20%20margin%2Dleft%3A%205px%3B%0A%20%20%7D%0A%0A%20%20%23TOC%20ul%20%7B%0A%20%20%20%20padding%2Dleft%3A%2040px%3B%0A%20%20%20%20margin%2Dleft%3A%20%2D1%2E5em%3B%0A%20%20%20%20margin%2Dtop%3A%205px%3B%0A%20%20%20%20margin%2Dbottom%3A%205px%3B%0A%20%20%7D%0A%20%20%23TOC%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dleft%3A%20%2D2em%3B%0A%20%20%7D%0A%20%20%23TOC%20li%20%7B%0A%20%20%20%20line%2Dheight%3A%2016px%3B%0A%20%20%7D%0A%0Atable%20%7B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dcolor%3A%20%23DDDDDD%3B%0A%20%20border%2Dstyle%3A%20outset%3B%0A%20%20border%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0A%20%20border%2Dwidth%3A%202px%3B%0A%20%20padding%3A%205px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%20%20line%2Dheight%3A%2018px%3B%0A%20%20padding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0A%20%20border%2Dleft%2Dstyle%3A%20none%3B%0A%20%20border%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Ap%20%7B%0A%20%20margin%3A%200%2E5em%200%3B%0A%7D%0A%0Ablockquote%20%7B%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20padding%3A%200%2E25em%200%2E75em%3B%0A%7D%0A%0Ahr%20%7B%0A%20%20border%2Dstyle%3A%20solid%3B%0A%20%20border%3A%20none%3B%0A%20%20border%2Dtop%3A%201px%20solid%20%23777%3B%0A%20%20margin%3A%2028px%200%3B%0A%7D%0A%0Adl%20%7B%0A%20%20margin%2Dleft%3A%200%3B%0A%7D%0A%20%20dl%20dd%20%7B%0A%20%20%20%20margin%2Dbottom%3A%2013px%3B%0A%20%20%20%20margin%2Dleft%3A%2013px%3B%0A%20%20%7D%0A%20%20dl%20dt%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%7D%0A%0Aul%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%7D%0A%20%20ul%20li%20%7B%0A%20%20%20%20list%2Dstyle%3A%20circle%20outside%3B%0A%20%20%7D%0A%20%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dbottom%3A%200%3B%0A%20%20%7D%0A%0Apre%2C%20code%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20color%3A%20%23333%3B%0A%7D%0Apre%20%7B%0A%20%20white%2Dspace%3A%20pre%2Dwrap%3B%20%20%20%20%2F%2A%20Wrap%20long%20lines%20%2A%2F%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20margin%3A%205px%200px%2010px%200px%3B%0A%20%20padding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Acode%20%7B%0A%20%20font%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0A%20%20font%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0A%20%20padding%3A%202px%200px%3B%0A%7D%0A%0Adiv%2Efigure%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0A%20%20background%2Dcolor%3A%20%23FFFFFF%3B%0A%20%20padding%3A%202px%3B%0A%20%20border%3A%201px%20solid%20%23DDDDDD%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20margin%3A%200%205px%3B%0A%7D%0A%0Ah1%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%20%20font%2Dsize%3A%2035px%3B%0A%20%20line%2Dheight%3A%2040px%3B%0A%7D%0A%0Ah2%20%7B%0A%20%20border%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20padding%2Dbottom%3A%202px%3B%0A%20%20font%2Dsize%3A%20145%25%3B%0A%7D%0A%0Ah3%20%7B%0A%20%20border%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20font%2Dsize%3A%20120%25%3B%0A%7D%0A%0Ah4%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0A%20%20margin%2Dleft%3A%208px%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Ah5%2C%20h6%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23ccc%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Aa%20%7B%0A%20%20color%3A%20%230033dd%3B%0A%20%20text%2Ddecoration%3A%20none%3B%0A%7D%0A%20%20a%3Ahover%20%7B%0A%20%20%20%20color%3A%20%236666ff%3B%20%7D%0A%20%20a%3Avisited%20%7B%0A%20%20%20%20color%3A%20%23800080%3B%20%7D%0A%20%20a%3Avisited%3Ahover%20%7B%0A%20%20%20%20color%3A%20%23BB00BB%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%0A%2F%2A%20Class%20described%20in%20https%3A%2F%2Fbenjeffrey%2Ecom%2Fposts%2Fpandoc%2Dsyntax%2Dhighlighting%2Dcss%0A%20%20%20Colours%20from%20https%3A%2F%2Fgist%2Egithub%2Ecom%2Frobsimmons%2F1172277%20%2A%2F%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Keyword%20%2A%2F%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%2F%2A%20DataType%20%2A%2F%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%2F%2A%20DecVal%20%28decimal%20values%29%20%2A%2F%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20BaseN%20%2A%2F%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Float%20%2A%2F%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Char%20%2A%2F%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20String%20%2A%2F%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%2F%2A%20Comment%20%2A%2F%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%2F%2A%20OtherToken%20%2A%2F%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20AlertToken%20%2A%2F%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Function%20calls%20%2A%2F%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%2F%2A%20ErrorTok%20%2A%2F%0A%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div id="header">
+<h1 class="title">Appendix 5: SpatialDemography Example with Stochasticity</h1>
+<h4 class="author"><em>Alexander C. Keyel <a href="mailto:skeyel@gmail.com">skeyel@gmail.com</a></em></h4>
+<h4 class="date"><em>2016-04-01</em></h4>
+</div>
+
+
+<div id="citation" class="section level2">
+<h2>Citation</h2>
+<p>Keyel, A.C., Gerstenlauer, J.L.K. and Wiegand, K. YEAR. SpatialDemography: a new, spatially explicit, stage-structured, metacommunity model for studying plant demography. Ecography 000: 000-000</p>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>In this examples, we have added environmental stochasticity to Example 1. We illustrate two forms of environmental stochasticity that can be modeled. In the first, the environmental conditions vary over the entire landscape. In the other, the environmental conditions vary within each cell. Note that other options exist (type ?env.change.type into the R console for more details after loading the spatialdemography package). Here, we model environmental stochasticity in the abstract (as a generic “environmental stochasticity” environmental layer) but in real applications, this could be replaced with one or more demographically-relevant stochastic environmental layers (e.g., climate). Here, the environmental conditions change at every time step. Species’ vital rates then change based on the species’ response traits.</p>
+<p>In this example, only the probability of transitioning from a juvenile to an adult responds to the stochastic environmental layer (this is for convenience). Each species has a base matrix transition coeffiecent, which determines reproduction under optimal conditions. The base matrix transition coefficient is multiplied by a modifier that decreases quadratically as the environmental value diverges from the species’ optimal value. At each time step, the values of the environmental stochasticity layer are drawn from a normal distribution with a mean and standard deviation of 1. Here, species had optimal values for the environmental stochasticity layer of 1, 1.1, and 0.9. Thus, if the environmental stochasticity layer had a value of 1.1 for a time step, Species 2 would experience no reduction in the juvenile-to-adult transition rate, Species 1 would experience a reduction, and Species 3 would experience the greatest reduction in the transition rate. In the next time step, the value could be (e.g.) 0.8, then favoring Species 3 (but still with some reduction to the vital rate. In addition to stochasticity across the entire landscape, the microhabitat also changes. This allows modeling of variation within cells, without affecting other cells. We note that through the use of the copula package, environmental layers can be generated that change stochastically but are still correlated to one another (not demonstrated).</p>
+<p>In addition, we have added an extinction threshold option to the model. When a species’ life stage drops below 1 it is rounded to 0 to prevent “resurrections”. For convenience, the species and landscapes do not correspond to real landscapes and species.</p>
+</div>
+<div id="example-2" class="section level2">
+<h2>Example 2</h2>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Uncommented model steps were described in greater detail in Example 1 (see Appendix 3).</span>
+
+<span class="co"># Load the spatialdemography package</span>
+<span class="kw">library</span>(spatialdemography)</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">run.name =<span class="st"> &quot;spdem_ex2&quot;</span>
+<span class="co"># Optionally set the working directory.</span>
+<span class="co">#setwd(&quot;C:/docs/beplants/Scripts/spatialdemography/vignettes&quot;)</span>
+scn =<span class="st"> </span><span class="dv">1</span> 
+s.lbl =<span class="st"> &quot;&quot;</span>
+file.ending =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;_%s&quot;</span>, run.name)
+DispPath =<span class="st"> &quot;dt/&quot;</span>
+run.path =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%s/&quot;</span>,run.name) 
+opath =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%soutputs/&quot;</span>,run.path)
+<span class="kw">dir.create</span>(opath,<span class="dt">showWarnings =</span> F, <span class="dt">recursive =</span> T)
+
+ResultsFile =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%sResults%s.csv&quot;</span>,opath,file.ending)
+<span class="co"># Code to (optionally) delete previous versions of the ResultsFile and TimeFile.</span>
+do.del =<span class="st"> </span><span class="dv">1</span>
+if (do.del ==<span class="st"> </span><span class="dv">1</span>){
+  <span class="kw">unlink</span>(ResultsFile) <span class="co">#Delete any previous ResultsFile</span>
+  }
+
+<span class="co"># Read in inputs</span>
+input.path =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%sinputs/&quot;</span>,run.path)
+<span class="co"># initial.conditions.file contains many important model settings</span>
+initial.conditions.file =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%sInitial_conditions%s.csv&quot;</span>
+                                  ,input.path,file.ending)
+<span class="co"># Option to visualize file in R</span>
+<span class="co">#ic = read.csv(initial.conditions.file)</span>
+<span class="co">#View(ic) # Examine the initial conditions file to check that the correct file was read in</span>
+
+<span class="co"># settings.file A file to specify overall model settings.</span>
+settings.file =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%sSettings%s.csv&quot;</span>,input.path,file.ending)
+<span class="co"># Option to visualize file in R</span>
+<span class="co">#set = read.csv(settings.file) </span>
+<span class="co">#View(set)</span>
+
+<span class="co"># env.file A file to describe environmental layers and how they change.</span>
+env.file =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%sEnvironmental_layers%s.csv&quot;</span>,input.path,file.ending)
+<span class="co"># Option to visualize file in R</span>
+<span class="co">#ef = read.csv(env.file)</span>
+<span class="co">#View(ef)</span>
+
+<span class="co"># Set up landscape inputs</span>
+lpath =<span class="st"> &quot;spdem_ex2/landscape/&quot;</span>
+<span class="co">#lc.file = sprintf(&quot;%slandcover_scn1.csv&quot;,lpath)</span>
+<span class="co">#h.file = sprintf(&quot;%sherbicide_scn1.csv&quot;,lpath)</span>
+<span class="co">#lc = read.csv(lc.file)</span>
+
+<span class="co"># Set up species file</span>
+spfile =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%sSpecies/Species%s.csv&quot;</span>,run.path, file.ending)
+sp.instr.file =<span class="st"> </span><span class="ot">NA</span>   
+sp.resp.instr.rile =<span class="st"> </span><span class="ot">NA</span>
+<span class="co">#spf = read.csv(spfile)</span>
+<span class="co">#View(spf)</span>
+
+<span class="co"># Set up initial species locations</span>
+locations.file =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;%slocations%s.csv&quot;</span>, input.path, file.ending)
+<span class="co">#locs = read.csv(locations.file)</span>
+<span class="co">#View(locs)</span>
+
+<span class="co"># Run ten times because each run will be slightly different due to stochasticity</span>
+<span class="kw">set.seed</span>(<span class="dv">567891234</span>)
+n_examples =<span class="st"> </span><span class="dv">10</span>
+for (scn in <span class="dv">1</span>:n_examples){
+  <span class="kw">SpatialDemography</span>(scn,s.lbl,file.ending,DispPath,run.path,opath,
+                  ResultsFile,initial.conditions.file,settings.file,env.file,
+                  spfile,sp.instr.file,sp.resp.instr.file,lpath,locations.file)
+}</code></pre>
+<pre><code>## Loading required package: multirich</code></pre>
+</div>
+<div id="summary-figures" class="section level2">
+<h2>Summary figures</h2>
+<p>Now that the model has been run, we will generate summary figures similar to those presented in Fig. 1.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read in species' data</span>
+n_timesteps =<span class="st"> </span><span class="dv">12</span>
+n_sp =<span class="st"> </span><span class="dv">3</span>
+sp.lst =<span class="st"> </span><span class="kw">list</span>(<span class="kw">rep</span>(<span class="kw">list</span>(<span class="ot">NA</span>), n_sp))
+time.lst =<span class="st"> </span><span class="kw">list</span>(<span class="kw">rep</span>(sp.lst, n_timesteps))
+<span class="co">#example.lst = list(rep(time.lst, n_examples))</span>
+<span class="co">#example.lst = example.lst[[1]] # Get rid of single list added by R</span>
+time.lst =<span class="st"> </span>time.lst[[<span class="dv">1</span>]]
+<span class="co">#str(time.lst)</span>
+
+<span class="co"># Loop through examples</span>
+for (i in <span class="dv">1</span>:n_examples){
+  spdat =<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">sprintf</span>(<span class="st">&quot;spdem_ex2/Example2_%s/SpeciesStats_Adults_v2.csv&quot;</span>, i))
+  spdat =<span class="st"> </span>spdat[ , <span class="dv">2</span>:<span class="dv">4</span>] <span class="co"># Drop runtime column and extra 3 columns</span>
+  
+  <span class="co"># Loop through time steps</span>
+  for (j in <span class="dv">1</span>:n_timesteps){
+    
+    <span class="co"># Loop through species</span>
+    for (k in <span class="dv">1</span>:n_sp){
+        
+      if (i ==<span class="st"> </span><span class="dv">1</span>){
+        new.rec =<span class="st"> </span>spdat[j,k] <span class="co"># j is row, k is species in reformatted matrix</span>
+      }else{
+        old.rec =<span class="st"> </span>time.lst[[j]][[k]]
+        <span class="co"># append the current record to the vector with one entry per example</span>
+        new.rec =<span class="st"> </span><span class="kw">c</span>(old.rec, spdat[j,k])  
+      }       
+      
+      <span class="co"># Update the massive nested list</span>
+      time.lst[[j]][[k]] =<span class="st"> </span>new.rec
+    }   
+  }
+}
+
+<span class="co"># Compute mean &amp; sd for each time step &amp; add to a data matrix</span>
+<span class="co"># two columns for each species, one for mean &amp; one for se</span>
+my.df =<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, n_timesteps *<span class="st"> </span>n_sp *<span class="st"> </span><span class="dv">2</span>)
+my.df =<span class="st"> </span><span class="kw">matrix</span>(my.df, <span class="dt">ncol =</span> (n_sp *<span class="st"> </span><span class="dv">2</span>)) 
+<span class="kw">rownames</span>(my.df) =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, n_timesteps)
+<span class="kw">colnames</span>(my.df) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sp1.mean&quot;</span>, <span class="st">&quot;sp2.mean&quot;</span>, <span class="st">&quot;sp3.mean&quot;</span>, <span class="st">&quot;sp1.se&quot;</span>, <span class="st">&quot;sp2.se&quot;</span>, <span class="st">&quot;sp3.se&quot;</span>)
+for (j in <span class="dv">1</span>:n_timesteps){
+  for (k in <span class="dv">1</span>:n_sp){
+    this.rec =<span class="st"> </span>time.lst[[j]][[k]]
+    new.mean =<span class="st"> </span><span class="kw">mean</span>(this.rec)
+    new.se =<span class="st"> </span><span class="kw">sd</span>(this.rec) /<span class="st"> </span><span class="kw">sqrt</span>(n_examples)
+    my.df[j, k] =<span class="st"> </span>new.mean
+    my.df[j, k +<span class="st"> </span>n_sp] =<span class="st"> </span>new.se
+  }
+}
+<span class="co"># convert from matrix to data frame</span>
+my.df =<span class="st"> </span><span class="kw">as.data.frame</span>(my.df)
+my.df$RunTime =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, n_timesteps)
+<span class="co"># Set up graph parameters</span>
+x.limit =<span class="st"> </span>n_timesteps +<span class="st"> </span><span class="dv">3</span>
+y.limit =<span class="st"> </span><span class="dv">22500</span>
+
+<span class="co"># replicate Fig 5a with se bars</span>
+col.vec =<span class="st"> </span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>)
+pch.vec =<span class="st"> </span><span class="kw">c</span>(<span class="dv">15</span>, <span class="dv">16</span>, <span class="dv">17</span>)
+x.label =<span class="st"> &quot;Time Step&quot;</span>
+y.label =<span class="st"> &quot;Number of Adults in Landscape&quot;</span>
+xaxt.val =<span class="st"> </span>yaxt.val =<span class="st"> 's'</span>
+<span class="co"># Loop through species</span>
+for (m in <span class="dv">1</span>:n_sp){
+  if (m !=<span class="st"> </span><span class="dv">1</span>){
+    x.label =<span class="st"> &quot;&quot;</span>
+    y.label =<span class="st"> &quot;&quot;</span>
+    xaxt.val =<span class="st"> 'n'</span>
+    yaxt.val =<span class="st"> 'n'</span>
+  }
+
+  <span class="co"># Plot means</span>
+  sp.name =<span class="st"> </span><span class="kw">names</span>(my.df)[m]
+  sp.means =<span class="st"> </span>my.df[[sp.name]]
+  x =<span class="st"> </span>my.df$RunTime
+  <span class="kw">plot</span>(x, sp.means, <span class="dt">xlab =</span> x.label, <span class="dt">ylab =</span> y.label,
+     <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,x.limit), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, y.limit), <span class="dt">pch =</span> pch.vec[m], <span class="dt">col =</span> col.vec[m])
+  
+  <span class="co"># Plot se's</span>
+  se.name =<span class="st"> </span><span class="kw">names</span>(my.df)[m +<span class="st"> </span>n_sp]
+  sp.se =<span class="st"> </span>my.df[[se.name]]
+  
+  <span class="kw">arrows</span>(x,sp.means,x,(sp.means +<span class="st"> </span>sp.se),<span class="dt">length =</span> <span class="fl">0.04</span>, <span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">xpd =</span> T)
+  <span class="kw">arrows</span>(x,sp.means,x,(sp.means -<span class="st"> </span>sp.se),<span class="dt">length =</span> <span class="fl">0.04</span>, <span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">xpd =</span> T)
+  <span class="kw">par</span>(<span class="dt">new =</span> T) <span class="co">#Tell R to add next plot to existing plot</span>
+}  </code></pre>
+<pre><code>## Warning in arrows(x, sp.means, x, (sp.means + sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped
+
+## Warning in arrows(x, sp.means, x, (sp.means + sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped
+
+## Warning in arrows(x, sp.means, x, (sp.means + sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped
+
+## Warning in arrows(x, sp.means, x, (sp.means + sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped
+
+## Warning in arrows(x, sp.means, x, (sp.means + sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped
+
+## Warning in arrows(x, sp.means, x, (sp.means + sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped</code></pre>
+<pre><code>## Warning in arrows(x, sp.means, x, (sp.means - sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped
+
+## Warning in arrows(x, sp.means, x, (sp.means - sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped
+
+## Warning in arrows(x, sp.means, x, (sp.means - sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped
+
+## Warning in arrows(x, sp.means, x, (sp.means - sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped
+
+## Warning in arrows(x, sp.means, x, (sp.means - sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped
+
+## Warning in arrows(x, sp.means, x, (sp.means - sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped</code></pre>
+<pre><code>## Warning in arrows(x, sp.means, x, (sp.means + sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped</code></pre>
+<pre><code>## Warning in arrows(x, sp.means, x, (sp.means - sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped</code></pre>
+<pre><code>## Warning in arrows(x, sp.means, x, (sp.means + sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped</code></pre>
+<pre><code>## Warning in arrows(x, sp.means, x, (sp.means - sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">segments</span>(<span class="fl">6.8</span>,<span class="dv">0</span>,<span class="fl">6.8</span>,y.limit, <span class="dt">lty =</span> <span class="dv">2</span>)</code></pre>
+<p><img src="data:image/png;base64,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" /></p>
+<p>In the above, blue squares indicate species 1, red circles species 2, and green triangles represent species 3. Error bars indicate standard error based on the 10 simulations. The dashed line indicates the onset of herbicide application. Note that Species 1’s shows a greater reduction in abundance prior to the herbicide than it did in Example 1. When stochasticity was added to the model, it penalized each species if the species’ optimum did not match the value for the stochastic layer. Consequently, stochasticity in this case could only hurt a species (note that transition matrix coefficients could have been increased to offset the decreases due to stochasticity). It is possible that Species 1’s much poorer performance relative to Species 2 is due to an unequal penalty when adding stochasticity to the model. We leave the exact cause of this discrepancy as an exercise for the reader.</p>
+<p>Next we examine just the plot for Species 3.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># replicate Fig 5b with standard error bars</span>
+n_cells =<span class="st"> </span><span class="dv">4</span>
+cell.lst =<span class="st"> </span><span class="kw">list</span>(<span class="kw">rep</span>(<span class="kw">list</span>(<span class="ot">NA</span>), n_cells))
+timestep.lst =<span class="st"> </span><span class="kw">list</span>(<span class="kw">rep</span>(cell.lst, n_timesteps))
+timestep.lst =<span class="st"> </span>timestep.lst[[<span class="dv">1</span>]] <span class="co"># Remove extraneous outer list</span>
+
+<span class="co"># Read in data from each example</span>
+for (i in <span class="dv">1</span>:n_examples){
+  cell.dat =<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">sprintf</span>(<span class="st">&quot;spdem_ex2/Example2_%s/SpeciesData.csv&quot;</span>, i))
+  <span class="co"># Restrict to species 3</span>
+  sp3.dat =<span class="st"> </span>cell.dat[cell.dat$Species ==<span class="st"> </span><span class="dv">3</span>, ]
+  <span class="co"># Restrict to adults</span>
+  sp3.dat =<span class="st"> </span>sp3.dat[sp3.dat$LifeStage ==<span class="st"> &quot;Adults&quot;</span>, ]
+  
+  for (j in <span class="dv">1</span>:n_timesteps){
+    for (k in <span class="dv">1</span>:n_cells){
+      if (i ==<span class="st"> </span><span class="dv">1</span>){
+        new.rec =<span class="st"> </span>sp3.dat[j , <span class="dv">3</span> +<span class="st"> </span>k] <span class="co"># 3 offsets for 1st 3 columns</span>
+      }else{
+        old.rec =<span class="st"> </span>timestep.lst[[j]][[k]]
+        new.rec =<span class="st"> </span><span class="kw">c</span>(old.rec, sp3.dat[j , <span class="dv">3</span> +<span class="st"> </span>k])
+      }
+      
+      timestep.lst[[j]][[k]] =<span class="st"> </span>new.rec <span class="co"># 3 offsets for 1st 3 columns</span>
+    }
+  }
+}
+
+<span class="co"># Compute mean &amp; sd for each time step &amp; add to a data matrix</span>
+<span class="co"># two columns for each species, one for mean &amp; one for se</span>
+my.df =<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, n_timesteps *<span class="st"> </span>n_cells *<span class="st"> </span><span class="dv">2</span>)
+my.df =<span class="st"> </span><span class="kw">matrix</span>(my.df, <span class="dt">ncol =</span> (n_cells *<span class="st"> </span><span class="dv">2</span>)) 
+<span class="kw">rownames</span>(my.df) =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, n_timesteps)
+<span class="kw">colnames</span>(my.df) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;cell1.mean&quot;</span>, <span class="st">&quot;cell2.mean&quot;</span>, <span class="st">&quot;cell3.mean&quot;</span>,
+                    <span class="st">&quot;cell4.mean&quot;</span>, <span class="st">&quot;cell1.se&quot;</span>, <span class="st">&quot;cell2.se&quot;</span>, <span class="st">&quot;cell3.se&quot;</span>, <span class="st">&quot;cell4.se&quot;</span>) 
+for (j in <span class="dv">1</span>:n_timesteps){
+  for (k in <span class="dv">1</span>:n_cells){
+    this.rec =<span class="st"> </span>timestep.lst[[j]][[k]]
+    new.mean =<span class="st"> </span><span class="kw">mean</span>(this.rec)
+    new.se =<span class="st"> </span><span class="kw">sd</span>(this.rec) /<span class="st"> </span><span class="kw">sqrt</span>(n_examples)
+    my.df[j, k] =<span class="st"> </span>new.mean
+    my.df[j, k +<span class="st"> </span>n_cells] =<span class="st"> </span>new.se
+  }
+}
+my.df =<span class="st"> </span><span class="kw">as.data.frame</span>(my.df)
+
+## Examine Species 3's performance by cell
+x.limit =<span class="st"> </span><span class="dv">15</span>
+y.min =<span class="st"> </span>-<span class="dv">2</span>
+y.limit =<span class="st"> </span><span class="dv">8</span>
+
+<span class="co"># One point type for each cell</span>
+pch.vec =<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">6</span>,<span class="dv">20</span>,<span class="dv">0</span>)
+<span class="co"># Same color for each cell to make it clear it is Species 3</span>
+col.vec =<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>)
+
+nam =<span class="st"> </span><span class="kw">names</span>(my.df)
+x =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>,n_timesteps)
+<span class="co"># Plot Cell 1</span>
+sp.means =<span class="st"> </span><span class="kw">log</span>(my.df$cell1.mean, <span class="dv">10</span>)
+<span class="kw">plot</span>(x,sp.means,
+    <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,x.limit), <span class="dt">ylim =</span> <span class="kw">c</span>(y.min,y.limit), 
+    <span class="dt">pch =</span> pch.vec[<span class="dv">1</span>], <span class="dt">col =</span> col.vec[<span class="dv">1</span>], 
+    <span class="dt">xlab =</span> <span class="st">&quot;Time Step&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Log10 Number of Adults of Species 3&quot;</span> )
+
+    <span class="co"># Plot se's</span>
+    se.name =<span class="st"> </span><span class="kw">names</span>(my.df)[m +<span class="st"> </span>n_sp]
+    sp.se =<span class="st"> </span><span class="kw">log</span>(my.df[[se.name]], <span class="dv">10</span>)
+    
+    <span class="kw">arrows</span>(x,sp.means,x,(sp.means +<span class="st"> </span>sp.se),<span class="dt">length =</span> <span class="fl">0.04</span>, <span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">xpd =</span> T)</code></pre>
+<pre><code>## Warning in arrows(x, sp.means, x, (sp.means + sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">    <span class="kw">arrows</span>(x,sp.means,x,(sp.means -<span class="st"> </span>sp.se),<span class="dt">length =</span> <span class="fl">0.04</span>, <span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">xpd =</span> T)</code></pre>
+<pre><code>## Warning in arrows(x, sp.means, x, (sp.means - sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot Cells 2 - 4</span>
+for (i in <span class="dv">2</span>:<span class="dv">4</span>){
+    <span class="kw">par</span>(<span class="dt">new =</span> T) <span class="co">#Tell R to add next plot to existing plot</span>
+    this.cell =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;cell%s.mean&quot;</span>, i)
+    sp.means =<span class="st"> </span><span class="kw">log</span>(my.df[[this.cell]],<span class="dv">10</span>)
+    <span class="kw">plot</span>(x, sp.means, 
+         <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,x.limit), <span class="dt">ylim =</span> <span class="kw">c</span>(y.min, y.limit), 
+         <span class="dt">pch =</span> pch.vec[i], <span class="dt">col =</span> col.vec[i], <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;&quot;</span>, 
+         <span class="dt">xaxt =</span> <span class="st">'n'</span>, <span class="dt">yaxt =</span> <span class="st">'n'</span>)
+    
+    <span class="co"># Plot se's</span>
+    se.name =<span class="st"> </span><span class="kw">names</span>(my.df)[i +<span class="st"> </span>n_cells]
+    sp.se =<span class="st"> </span><span class="kw">log</span>(my.df[[se.name]], <span class="dv">10</span>)
+    <span class="kw">arrows</span>(x,sp.means,x,(sp.means +<span class="st"> </span>sp.se),<span class="dt">length =</span> <span class="fl">0.04</span>, <span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">xpd =</span> T)
+    <span class="kw">arrows</span>(x,sp.means,x,(sp.means -<span class="st"> </span>sp.se),<span class="dt">length =</span> <span class="fl">0.04</span>, <span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">xpd =</span> T)
+
+}</code></pre>
+<pre><code>## Warning in arrows(x, sp.means, x, (sp.means + sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped</code></pre>
+<pre><code>## Warning in arrows(x, sp.means, x, (sp.means - sp.se), length = 0.04, angle
+## = 90, : zero-length arrow is of indeterminate angle and so skipped</code></pre>
+<p><img src="data:image/png;base64,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" /></p>
+<p>Example 2 shows a similar overall pattern as in Example 1, but with substantial variation in species’ abundances due to the the added stochasticity.</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

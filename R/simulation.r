@@ -56,6 +56,7 @@
 #' @param repro.proportion The proportion of the species reproductive potential with which to invade
 #' @param K_g The carrying capacity in grams
 #' @param multi.species.K An indicator for whether or not to include a multispecies carrying capacity
+#' @param extinction.threshold An optional threshold. Below this threshold, a cell's populations will be rounded down to 0.
 #' @param edge.type The edge type. Currently only ABSORBING and TORUS are supported
 #' @param do.simulation An indicator for whether or not to run the simulation
 #' @param do.diagnostics An indicator for whether or not to compute diagnostics
@@ -78,7 +79,7 @@ Simulation<-function(Model.Name,
                       MaxTime,
                       invasion, num.invaders, cells.to.invade,repro.proportion,
                       K_g, multi.species.K,
-                      edge.type,
+                      extinction.threshold, edge.type,
                       do.simulation,do.diagnostics, testing){ #,do.eigen.maps,do.disp.maps
 
     #shorten total species number to species end to spe
@@ -352,7 +353,17 @@ Simulation<-function(Model.Name,
             if (RunTime ==1 ){
                 run.times = c(run.times,gettime()); run.lbl = c(run.lbl,"Carrying capacity applied")
                 }
-        
+
+            # Check if an extinction threshold is desired, and if so, apply it.
+            if (length(extinction.threshold) > 0){
+                for (sp in 1:spe){
+                  nt1.lst[[sp]][IAdults] = sapply(nt1.lst[[sp]][IAdults], ethreshold, extinction.threshold)
+                  nt1.lst[[sp]][IJuveniles] = sapply(nt1.lst[[sp]][IJuveniles], ethreshold, extinction.threshold)
+                  nt1.lst[[sp]][ISeedBank] = sapply(nt1.lst[[sp]][ISeedBank], ethreshold, extinction.threshold)
+                }             
+            }
+           
+           
             #Create lists to hold summary output if vdb.data is being used
             SeedBank.lst = Juveniles.lst = Adults.lst = All.lst = Cells.Occupied.lst = rep(NA,spe)
             

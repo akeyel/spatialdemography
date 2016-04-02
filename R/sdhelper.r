@@ -30,8 +30,8 @@
 #' @details \tabular{ll}{ %% Note tabular{ll} is tabular{lowercase(LL)} not tabular{11} 
 #' Package: \tab spatialdemography\cr
 #' Type: \tab Package\cr
-#' Version: \tab 1.0.0.9999\cr
-#' Date: \tab 2015-12-12\cr
+#' Version: \tab 1.0.1\cr
+#' Date: \tab 2015-03-31\cr
 #' License: \tab GPL-2 (or later)\cr
 #' }
 #' @author Alexander "Sasha" Keyel & Jakob L.K. Gerstenlauer\cr
@@ -717,6 +717,21 @@ get.mod = function(env.val,opt.val,funct,par1,par2){
     
     return(modifier)    
     }
+
+#' Simple function to apply an extinction threshold
+#' 
+#' @param in_value value to check against threshold
+#' @param e_threshold Threshold. Values less than this will be rounded to zero.
+#' 
+#' @return A value modified according to the threshold
+ethreshold = function(in_value, e_threshold){
+  out_value = in_value
+  if (in_value < e_threshold){
+    out_value = 0
+  }
+  
+  return(out_value)
+}
 
 #DD# Might be good to expand the documentation a little on this one.
 

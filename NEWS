@@ -18,6 +18,10 @@ Add checks to trait calculation to ensure that vital rates are within the allowa
 Drop landscape.identifiers and just use the entire environmental layer name in the code (would allow two environmental variables to start with the same name)
 
 CHANGE LOG
+# Changes in 1.0.1
+Added option to enforce a pseudo-extinction threshold
+Minor corrections to documentation
+
 # Changes in 1.0.0
 Updated NEWS to contain a list of potential future code improvements
 Changed version number to 1.0.0 as part of a manuscript submission requirement

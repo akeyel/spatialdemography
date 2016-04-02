@@ -108,16 +108,17 @@ knitr::kable(head(ic[1:5]))
 **MaxTime** specifies the number of model iterations  
  
 ```{r}
-knitr::kable(head(ic[6:9]))
+knitr::kable(head(ic[6:10]))
 ```
 
 **K_g** indicates the adult carrying capacity in grams  
 **multi.species.K** is an indicator. When 0, each species has its own carrying capacity. When 1, species share a single carrying capacity  
 **competitiontype** is an indicator. When 0, there is no microsite competition. When 1, each cell has a set number of microsites available to each species. When 2, all species are limited by a single total number of microsites  
 **microsites** This specifies the number of microsites. If competitiontype == 0, then this can be NA.  
+**extinction.threshold** This specifies a threshold below which a species' life stage will be rounded to 0. This may prevent a species from persisting as fractional individuals (e.g., when set to 1).
 
 ```{r}
-knitr::kable(head(ic[10:13]))
+knitr::kable(head(ic[11:14]))
 ```
   
 **invasion** This setting indicates how frequently invasion will occur (every X time steps). Zero indicates that invasion will not occur.  
@@ -128,7 +129,7 @@ knitr::kable(head(ic[10:13]))
 As you can see, invasion is turned off for this example.  
 
 ```{r}
-knitr::kable(head(ic[14:20]))
+knitr::kable(head(ic[15:21]))
 ```
 
 **num.adults** Specifies the number of starting adults in each occupied cell. This can be overridden when reading in species' locations from a file
@@ -430,28 +431,42 @@ In the beginning of the simulation, Species 3 had only been able to weakly invad
 ssa = "spdem_ex1/Example1/SpeciesStats_Adults_v2.csv"
 my.df = read.csv(ssa)
 
+scale.factor = 1
+
+# For creating manuscript figure (uncomment to produce a stand-alone figure for the manuscript. Also uncomment the legends and dev.off() at bottom of code block)
+#tiff(file = "Fig5.tif", height = 600, width = 1200, compression = c("lzw"))
+#par(mfrow = c(1,2))
+#par(mar = c(5,6,2,2))
+#scale.factor = 2
+
+
 x.limit = 15
 y.limit = 22500
 
 # Plot Species 1
 plot(my.df$RunTime, my.df$Sp1,
      xlab = "Time Step", ylab = "Number of Adults in Landscape",
-     xlim = c(0,x.limit), ylim = c(0, y.limit), pch = 15, col = 4)
+     xlim = c(0,x.limit), ylim = c(0, y.limit), pch = 15, col = 4,
+     cex = scale.factor, cex.lab = scale.factor)
 
 par(new = T) #Tell R to add next plot to existing plot
 
 # Plot Species 2
 plot(my.df$RunTime, my.df$Sp2, xlim = c(0,x.limit), ylim = c(0, y.limit),
-     pch = 16, col = 2, xlab = "", ylab = "", xaxt = 'n', yaxt = 'n')
+     pch = 16, col = 2, xlab = "", ylab = "", xaxt = 'n', yaxt = 'n',
+     cex = scale.factor, cex.lab = scale.factor)
 
 par(new = T) #Tell R to add next plot to existing plot
 
 # Plot Species 3
 plot(my.df$RunTime, my.df$Sp3, xlim = c(0,x.limit), ylim = c(0, y.limit),
-     pch = 17, col = 3, xlab = "", ylab = "", xaxt = 'n', yaxt = 'n')
+     pch = 17, col = 3, xlab = "", ylab = "", xaxt = 'n', yaxt = 'n',
+     cex = scale.factor, cex.lab = scale.factor)
 
-#legend(0,y.limit, c('Species 1','Species 2','Species 3'), pch = c(15,16,17),
-        #col = c(4,2,3), cex = 1.5)
+# Add line for initial herbicide application
+segments(6.8,0,6.8,y.limit, lty = 2)
+
+#legend(0,y.limit, c('Species 1','Species 2','Species 3'), pch = c(15,16,17), col = c(4,2,3), cex = 1.5)
 
 
 ## Examine Species 3's performance by cell
@@ -468,7 +483,8 @@ col.vec = c(3,3,3,3)
 plot(sp.dat.ad3$TimeStep,log(sp.dat.ad3$Cell1,10),
      xlim = c(0,x.limit), ylim = c(0,y.limit), 
      pch = pch.vec[1], col = col.vec[1], 
-     xlab = "Time Step", ylab = "Log10 Number of Adults of Species 3" )
+     xlab = "Time Step", ylab = "Log10 Number of Adults of Species 3",
+     cex = scale.factor, cex.lab = scale.factor)
 
 # Plot Cells 2 - 4
 for (i in 2:4){
@@ -477,12 +493,15 @@ for (i in 2:4){
     plot(sp.dat.ad3$TimeStep, log(sp.dat.ad3[[this.cell]],10), 
          xlim = c(0,x.limit), ylim = c(0, y.limit), 
          pch = pch.vec[i], col = col.vec[i], xlab = "", ylab = "", 
-         xaxt = 'n', yaxt = 'n')
+         xaxt = 'n', yaxt = 'n',
+         cex = scale.factor, cex.lab = scale.factor)
 }
+segments(6.8,0,6.8,y.limit, lty = 2)
 
-#legend(11.7,1.2,c('Cell 1','Cell 2','Cell 3','Cell 4'),
-        #pch = pch.vec, col = col.vec, cex = 1.5 )
+#legend(11.7,1.2,c('Cell 1','Cell 2','Cell 3','Cell 4'), pch = pch.vec, col = col.vec, cex = 1.5 )
 
+# For outputting a tiff
+#dev.off()
 
 ```
 
